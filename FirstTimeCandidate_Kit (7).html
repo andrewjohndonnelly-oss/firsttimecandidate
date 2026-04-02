@@ -1,0 +1,2425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Groundwork — First-Time Candidate Starter Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#0F1F3D;
+  --navy-light:#1A2F52;
+  --red:#C0392B;
+  --gold:#C9A84C;
+  --gold-light:#FBF5E6;
+  --off:#F8F9FA;
+  --light:#E9ECEF;
+  --border:#DEE2E6;
+  --mgray:#6C757D;
+  --dark:#212529;
+  --green:#1A7A4A;
+  --green-bg:#EEFAF3;
+  --surface:#FFFFFF;
+  --radius:8px;
+  --radius-lg:12px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,.08),0 2px 4px rgba(0,0,0,.04);
+  --shadow-lg:0 12px 32px rgba(0,0,0,.12),0 4px 8px rgba(0,0,0,.06);
+  --transition:all 200ms cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--off);color:var(--dark);min-height:100vh;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+
+/* SCREENS */
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* PASSWORD GATE */
+.pw-gate{display:none;position:fixed;inset:0;background:rgba(10,15,28,.88);backdrop-filter:blur(8px);z-index:9999;align-items:center;justify-content:center;}
+.pw-gate.visible{display:flex;}
+.pw-box{background:#fff;padding:48px 44px;width:420px;text-align:center;border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);}
+.pw-logo{display:block;margin-bottom:4px;}
+.pw-title{font-size:20px;font-weight:600;color:var(--navy);margin:20px 0 8px;letter-spacing:-.3px;}
+.pw-sub{font-size:14px;color:var(--mgray);margin-bottom:28px;line-height:1.6;}
+.pw-input{width:100%;padding:13px 16px;font-family:'Inter',sans-serif;font-size:16px;border:1.5px solid var(--border);border-radius:var(--radius);color:var(--dark);background:var(--off);outline:none;text-align:center;letter-spacing:.16em;margin-bottom:12px;transition:var(--transition);}
+.pw-input:focus{border-color:var(--navy);background:#fff;box-shadow:0 0 0 3px rgba(15,31,61,.08);}
+.pw-input.error{border-color:var(--red);animation:shake .3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+.pw-btn{width:100%;padding:13px;background:var(--navy);color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;border:none;cursor:pointer;border-radius:var(--radius);transition:var(--transition);letter-spacing:.01em;}
+.pw-btn:hover{background:var(--navy-light);transform:translateY(-1px);box-shadow:var(--shadow-md);}
+.pw-btn:active{transform:translateY(0);}
+.pw-error{font-size:12px;color:var(--red);margin-top:8px;display:none;}
+.pw-back{font-size:13px;color:var(--mgray);margin-top:20px;cursor:pointer;}
+.pw-back a{color:var(--navy);text-decoration:none;font-weight:500;}
+.pw-back a:hover{text-decoration:underline;}
+
+/* NAV */
+.nav{background:var(--navy);display:flex;flex-direction:column;min-height:100vh;width:232px;flex-shrink:0;}
+.nav-logo{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.07);}
+.nav-user{padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.07);}
+.nav-user-name{font-size:13px;font-weight:500;color:#fff;letter-spacing:-.1px;}
+.nav-user-race{font-size:11px;color:rgba(255,255,255,.38);margin-top:3px;line-height:1.5;}
+.nav-tier{display:inline-block;margin-top:7px;padding:2px 9px;background:rgba(201,168,76,.2);color:var(--gold);font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;border-radius:4px;}
+.nav-items{padding:8px 0;flex:1;}
+.nav-section{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22);padding:16px 20px 5px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 20px;font-size:13px;color:rgba(255,255,255,.5);cursor:pointer;transition:var(--transition);border-left:2px solid transparent;margin:1px 0;}
+.nav-item:hover{color:rgba(255,255,255,.88);background:rgba(255,255,255,.06);}
+.nav-item.active{color:#fff;background:rgba(255,255,255,.09);border-left-color:var(--gold);font-weight:500;}
+.nav-item.locked{color:rgba(255,255,255,.2);cursor:not-allowed;}
+.nav-item .lbadge{margin-left:auto;font-size:9px;padding:2px 6px;background:rgba(201,168,76,.15);color:rgba(201,168,76,.7);border-radius:3px;font-weight:600;letter-spacing:.04em;}
+.nav-upgrade{margin:10px 14px 14px;padding:14px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.18);border-radius:var(--radius);}
+.nav-upgrade p{font-size:11px;color:rgba(255,255,255,.5);line-height:1.55;margin-bottom:10px;}
+.nav-upgrade button{display:block;width:100%;padding:9px;text-align:center;background:var(--gold);color:var(--navy);font-size:11px;font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;border-radius:5px;transition:var(--transition);letter-spacing:.02em;}
+.nav-upgrade button:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.nav-logout{padding:12px 20px;font-size:12px;color:rgba(255,255,255,.25);cursor:pointer;border-top:1px solid rgba(255,255,255,.05);transition:color 200ms;}
+.nav-logout:hover{color:rgba(255,255,255,.55);}
+
+/* DASHBOARD LAYOUT */
+.dash-layout{display:flex;min-height:100vh;}
+.dash-main-area{flex:1;overflow-y:auto;background:var(--off);}
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:13px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 1px 0 rgba(0,0,0,.04);}
+.topbar-title{font-size:15px;font-weight:600;color:var(--navy);letter-spacing:-.2px;}
+.topbar-right{display:flex;align-items:center;gap:8px;}
+.crumb{font-size:12px;color:var(--mgray);}
+.crumb span{color:var(--navy);font-weight:500;}
+.btn-s{padding:7px 14px;font-size:12px;font-weight:500;background:#fff;color:var(--dark);border:1.5px solid var(--border);cursor:pointer;font-family:'Inter',sans-serif;transition:var(--transition);border-radius:6px;}
+.btn-s:hover{border-color:var(--navy);color:var(--navy);background:var(--off);}
+.page-wrap{padding:28px 32px;}
+
+/* DASHBOARD CONTENT */
+.welcome-banner{background:var(--navy);padding:24px 28px;margin-bottom:20px;position:relative;overflow:hidden;border-radius:var(--radius-lg);}
+.welcome-banner::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);border-radius:0 0 0 var(--radius-lg);}
+.wb-eyebrow{font-size:10px;color:var(--gold);font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;opacity:.85;}
+.wb-title{font-size:18px;color:#fff;font-weight:600;margin-bottom:5px;letter-spacing:-.3px;}
+.wb-sub{font-size:13px;color:rgba(255,255,255,.5);line-height:1.65;}
+
+.stats-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.stat-c{background:#fff;border:1.5px solid var(--border);padding:18px 20px;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);transition:var(--transition);}
+.stat-c:hover{box-shadow:var(--shadow-md);border-color:var(--light);}
+.stat-lbl{font-size:11px;color:var(--mgray);font-weight:600;letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px;}
+.stat-val{font-size:26px;font-weight:600;color:var(--navy);letter-spacing:-.5px;line-height:1.1;}
+.stat-s{font-size:11px;color:var(--mgray);margin-top:4px;}
+
+.phase-card{background:#fff;border:1.5px solid var(--border);padding:20px 24px;margin-bottom:20px;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.card-hdr-title{font-size:12px;font-weight:600;color:var(--navy);letter-spacing:.06em;text-transform:uppercase;}
+.card-hdr-sub{font-size:12px;color:var(--mgray);}
+.phase-track{display:flex;margin-top:8px;gap:4px;}
+.ps{flex:1;text-align:center;}
+.ps-bar{height:3px;background:var(--light);margin-bottom:8px;border-radius:2px;}
+.ps.done .ps-bar{background:var(--navy);}
+.ps.cur .ps-bar{background:var(--gold);}
+.ps-lbl{font-size:10px;color:var(--mgray);}
+.ps.done .ps-lbl{color:var(--navy);font-weight:500;}
+.ps.cur .ps-lbl{color:var(--gold);font-weight:600;}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+
+.comp-c{background:#fff;border:1.5px solid var(--border);padding:20px;cursor:pointer;transition:var(--transition);position:relative;overflow:hidden;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);}
+.comp-c:hover{border-color:var(--navy);box-shadow:var(--shadow-md);transform:translateY(-1px);}
+.comp-c.locked-c{cursor:default;}
+.comp-c.locked-c:hover{border-color:var(--border);box-shadow:var(--shadow-sm);transform:none;}
+.comp-num{font-size:10px;font-weight:600;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.comp-name{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:5px;letter-spacing:-.15px;}
+.comp-desc{font-size:12px;color:var(--mgray);line-height:1.55;}
+.comp-status{display:flex;align-items:center;gap:6px;margin-top:14px;font-size:11px;font-weight:500;}
+.comp-status.done{color:var(--green);}
+.comp-status.active{color:var(--navy);}
+.sdot{width:6px;height:6px;border-radius:50%;}
+.sdot.done{background:var(--green);}
+.sdot.active{background:var(--gold);}
+
+.blur-ov{position:absolute;inset:0;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);background:rgba(248,249,250,.8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border-radius:var(--radius-lg);}
+.blur-lock{width:30px;height:30px;background:var(--navy);display:flex;align-items:center;justify-content:center;border-radius:7px;}
+.blur-lock svg{width:14px;height:14px;fill:var(--gold);}
+.blur-txt{font-size:12px;font-weight:500;color:var(--navy);}
+.blur-btn-el{padding:7px 18px;background:var(--navy);color:#fff;font-size:11px;font-weight:500;border:none;cursor:pointer;font-family:'Inter',sans-serif;border-radius:6px;transition:var(--transition);}
+.blur-btn-el:hover{background:var(--navy-light);}
+
+.dl-c{background:#fff;border:1.5px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:var(--transition);position:relative;overflow:hidden;border-radius:var(--radius);box-shadow:var(--shadow-sm);}
+.dl-c:hover{border-color:var(--navy);box-shadow:var(--shadow-md);transform:translateY(-1px);}
+.dl-c.locked-dl:hover{border-color:var(--border);box-shadow:var(--shadow-sm);transform:none;}
+.dl-icon{width:34px;height:34px;background:var(--off);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;font-weight:700;color:var(--navy);border-radius:7px;}
+.dl-name{font-size:12px;font-weight:600;color:var(--navy);}
+.dl-fmt{font-size:11px;color:var(--mgray);margin-top:1px;}
+.dl-blur{position:absolute;inset:0;backdrop-filter:blur(4px);background:rgba(248,249,250,.82);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--mgray);font-weight:600;letter-spacing:.04em;}
+
+/* COMPONENT PAGE SHELLS */
+.comp-banner{background:var(--navy);padding:28px 32px;position:relative;overflow:hidden;margin-bottom:0;}
+.comp-banner::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);}
+.cb-eyebrow{font-size:10px;color:var(--gold);font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;opacity:.85;}
+.cb-title{font-family:'Inter',sans-serif;font-size:24px;color:#fff;font-weight:700;margin-bottom:8px;line-height:1.2;}
+.cb-sub{font-size:13px;color:rgba(255,255,255,.5);line-height:1.65;max-width:520px;}
+
+.coming-soon-box{background:#fff;border:1.5px solid var(--border);padding:56px;text-align:center;margin:32px;border-radius:var(--radius-lg);}
+.cs-title{font-size:18px;font-weight:600;color:var(--navy);margin-bottom:10px;letter-spacing:-.3px;}
+.cs-sub{font-size:14px;color:var(--mgray);line-height:1.65;max-width:480px;margin:0 auto;}
+
+/* HERO / LANDING */
+.hero{background:var(--navy);position:relative;overflow:hidden;}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 60% 40%,rgba(201,168,76,.06) 0%,transparent 70%);pointer-events:none;}
+.hero-accent{position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);}
+.hero-inner{max-width:800px;margin:0 auto;padding:72px 40px 68px;position:relative;}
+.hero-eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;color:rgba(201,168,76,.7);text-transform:uppercase;margin-bottom:24px;}
+.hero-title{font-family:'Inter',sans-serif;font-size:clamp(36px,5.5vw,58px);font-weight:800;color:#fff;line-height:1.08;margin-bottom:20px;letter-spacing:-.5px;}
+.hero-title em{
+  color:var(--gold);
+  font-style:italic;
+  position:relative;
+  display:inline-block;
+}
+.hero-title em::after{
+  content:'';
+  position:absolute;
+  left:0;
+  bottom:-4px;
+  width:100%;
+  height:2px;
+  background:var(--gold);
+  transform:scaleX(0);
+  transform-origin:left center;
+  animation:underlineReveal 0.7s cubic-bezier(.4,0,.2,1) 0.5s forwards;
+}
+@keyframes underlineReveal{
+  from{transform:scaleX(0);opacity:0;}
+  to{transform:scaleX(1);opacity:1;}
+}
+.hero-sub{font-size:17px;font-weight:300;color:rgba(255,255,255,.6);line-height:1.75;max-width:500px;margin-bottom:40px;}
+.hero-cta{display:inline-block;background:var(--gold);color:var(--navy);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;padding:14px 32px;border:none;cursor:pointer;letter-spacing:.02em;transition:var(--transition);border-radius:8px;}
+.hero-cta:hover{filter:brightness(1.06);transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,168,76,.35);}
+.hero-cta:active{transform:translateY(0);}
+.hero-kit-label{margin-top:52px;padding-top:36px;border-top:1px solid rgba(255,255,255,.08);display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px;}
+.kit-item{font-size:12px;color:rgba(255,255,255,.38);padding:4px 0;letter-spacing:.01em;}
+.kit-item span{color:rgba(201,168,76,.75);margin-right:8px;font-weight:600;}
+
+/* PROGRESS */
+.progress-wrap{background:var(--navy);position:sticky;top:0;z-index:100;display:none;border-bottom:1px solid rgba(255,255,255,.05);}
+.progress-wrap.visible{display:block;}
+.progress-inner{max-width:800px;margin:0 auto;padding:13px 40px;display:flex;align-items:center;gap:16px;}
+.progress-label{font-size:10px;font-weight:600;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;opacity:.85;}
+.progress-bar-bg{flex:1;height:2px;background:rgba(255,255,255,.1);border-radius:2px;}
+.progress-bar-fill{height:100%;background:var(--gold);transition:width .45s ease;border-radius:2px;}
+.progress-pct{font-size:11px;color:rgba(255,255,255,.35);min-width:36px;text-align:right;}
+
+/* ASSESSMENT */
+.main-wrap{max-width:720px;margin:0 auto;padding:0 40px 120px;}
+.s-header{display:none;margin-top:60px;margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--border);}
+.s-header.visible{display:block;}
+.s-num{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+.s-title{font-family:'Inter',sans-serif;font-size:28px;font-weight:700;color:var(--navy);margin-bottom:10px;letter-spacing:-.3px;}
+.s-desc{font-size:15px;color:var(--mgray);line-height:1.7;max-width:540px;}
+.callout{background:var(--gold-light);border-top:3px solid var(--gold);border-radius:0 0 var(--radius) var(--radius);padding:22px 28px;margin:28px 0;font-size:14px;line-height:1.72;color:var(--dark);display:none;}
+.callout.visible{display:block;}
+.callout strong{display:block;font-weight:700;color:var(--navy);margin-bottom:8px;font-size:10px;letter-spacing:.09em;text-transform:uppercase;}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:32px;margin-bottom:12px;display:none;animation:fadeUp .25s ease;box-shadow:var(--shadow-sm);}
+.q-card.visible{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.q-lbl{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--mgray);text-transform:uppercase;margin-bottom:12px;}
+.q-txt{font-size:17px;color:var(--dark);line-height:1.55;margin-bottom:22px;font-weight:400;letter-spacing:-.1px;}
+.q-ta{width:100%;min-height:96px;border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-family:'Inter',sans-serif;font-size:15px;color:var(--dark);background:var(--off);resize:vertical;outline:none;transition:var(--transition);line-height:1.65;}
+.q-ta:focus{border-color:var(--navy);background:#fff;box-shadow:0 0 0 3px rgba(15,31,61,.07);}
+#candidateName{width:100%;padding:14px 16px;font-family:'Inter',sans-serif;font-size:15px;color:var(--dark);background:var(--off);border:1.5px solid var(--border);border-radius:var(--radius);outline:none;transition:var(--transition);}
+#candidateName:focus{border-color:var(--navy);background:#fff;box-shadow:0 0 0 3px rgba(15,31,61,.07);}
+#tlNotes{transition:var(--transition);}
+#tlNotes:focus{border-color:var(--navy);background:#fff;}
+.q-ta.answered{border-color:var(--gold);background:#fff;}
+.nav-row{display:none;gap:12px;margin-top:32px;align-items:center;}
+.nav-row.visible{display:flex;}
+.btn-next{background:var(--navy);color:#fff;border:none;padding:13px 32px;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:var(--transition);border-radius:8px;letter-spacing:.01em;}
+.btn-next:hover{background:var(--navy-light);transform:translateY(-1px);box-shadow:var(--shadow-md);}
+.btn-next:active{transform:translateY(0);}
+.btn-next:disabled{opacity:.28;cursor:default;transform:none;box-shadow:none;}
+.btn-back{background:none;color:var(--mgray);border:1.5px solid var(--border);padding:13px 22px;font-family:'Inter',sans-serif;font-size:14px;cursor:pointer;border-radius:8px;transition:var(--transition);}
+.btn-back:hover{color:var(--dark);border-color:var(--dark);}
+.nav-hint{font-size:12px;color:var(--mgray);margin-left:auto;}
+
+/* MAP */
+#map-wrap{width:100%;background:var(--off);border:1.5px solid var(--border);border-radius:var(--radius);padding:12px 8px 8px;margin-bottom:4px;}
+.map-hint{font-size:12px;color:var(--mgray);text-align:center;margin-bottom:8px;}
+#map-tooltip{position:absolute;background:var(--navy);color:#fff;font-size:12px;font-weight:500;padding:5px 10px;border-radius:5px;pointer-events:none;display:none;white-space:nowrap;z-index:10;}
+.map-state-path{cursor:pointer;transition:opacity .1s;}
+.map-state-path:hover{opacity:.72;}
+.map-state-panel{display:none;margin-top:12px;background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:22px 24px;animation:fadeUp .22s ease;box-shadow:var(--shadow-sm);}
+.map-state-panel.visible{display:block;}
+.map-state-name{font-size:18px;font-weight:600;color:var(--navy);margin-bottom:4px;letter-spacing:-.3px;}
+.map-state-hint{font-size:13px;color:var(--mgray);margin-bottom:16px;}
+.map-cascade-label{font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--mgray);margin-bottom:10px;margin-top:18px;}
+.race-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;}
+.race-btn{padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;color:var(--dark);background:var(--off);border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;text-align:left;transition:var(--transition);font-weight:400;}
+.race-btn:hover{background:#fff;border-color:var(--navy);color:var(--navy);}
+.race-btn.selected{background:#fff;border:2px solid var(--navy);color:var(--navy);font-weight:600;}
+.map-county-wrap{display:none;margin-top:4px;}
+.map-county-wrap.visible{display:block;}
+.map-county-input{width:100%;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;color:var(--dark);background:var(--off);border:1.5px solid var(--border);border-radius:var(--radius);outline:none;transition:var(--transition);}
+.map-county-input:focus{border-color:var(--navy);background:#fff;box-shadow:0 0 0 3px rgba(15,31,61,.07);}
+.map-confirm-btn{display:none;margin-top:20px;padding:12px 28px;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;background:var(--navy);color:#fff;border:none;cursor:pointer;border-radius:8px;transition:var(--transition);}
+.map-confirm-btn:hover{background:var(--navy-light);transform:translateY(-1px);}
+.map-confirm-btn.visible{display:inline-block;}
+.map-confirmed{display:none;margin-top:14px;padding:16px 20px;background:var(--gold-light);border-top:3px solid var(--gold);border-radius:0 0 var(--radius) var(--radius);}
+.map-confirmed.visible{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.map-confirmed-label{font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--mgray);}
+.map-confirmed-value{font-size:15px;font-weight:600;color:var(--navy);flex:1;letter-spacing:-.2px;}
+.map-change-link{font-size:12px;color:var(--mgray);cursor:pointer;text-decoration:underline;}
+
+/* PAYWALL */
+.paywall{display:none;margin-top:60px;}
+.paywall.visible{display:block;}
+.pw-header{background:var(--navy);padding:52px 48px;position:relative;overflow:hidden;border-radius:var(--radius-lg) var(--radius-lg) 0 0;}
+.pw-header::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);}
+.pw-eyebrow{font-size:10px;font-weight:600;color:rgba(201,168,76,.75);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;}
+.pw-title{font-family:'Inter',sans-serif;font-size:34px;font-weight:700;color:#fff;line-height:1.15;margin-bottom:16px;letter-spacing:-.4px;}
+.pw-sub{font-size:15px;color:rgba(255,255,255,.55);line-height:1.72;max-width:480px;}
+.pw-results{background:#fff;border:1.5px solid var(--border);border-top:none;padding:40px 48px;border-radius:0 0 var(--radius-lg) var(--radius-lg);}
+.r-label{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--mgray);text-transform:uppercase;margin-bottom:24px;}
+.pillar-row{display:flex;align-items:flex-start;gap:20px;padding:18px 0;border-bottom:1px solid var(--border);}
+.pillar-row:last-child{border-bottom:none;}
+.pillar-icon{width:40px;height:40px;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;font-weight:700;color:var(--gold);font-family:'Inter',sans-serif;border-radius:9px;}
+.pillar-name{font-size:10px;font-weight:600;color:var(--navy);margin-bottom:5px;text-transform:uppercase;letter-spacing:.08em;}
+.pillar-snippet{font-size:14px;color:var(--mgray);line-height:1.6;font-style:italic;}
+.divider{margin:36px 0 32px;padding-top:32px;border-top:1px solid var(--border);}
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px;}
+@media(max-width:600px){.pricing-grid,.grid-2,.grid-3,.stats-3{grid-template-columns:1fr;}}
+.price-card{border:1.5px solid var(--border);padding:32px 28px;background:var(--off);position:relative;border-radius:var(--radius-lg);}
+.price-card.featured{background:#fff;border-color:var(--navy);border-width:2px;box-shadow:var(--shadow-md);}
+.price-badge{position:absolute;top:-1px;right:24px;background:var(--navy);color:#fff;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:5px 14px;border-radius:0 0 6px 6px;}
+.price-name{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--mgray);text-transform:uppercase;margin-bottom:14px;}
+.price-amt{font-family:'Inter',sans-serif;font-size:44px;font-weight:800;letter-spacing:-.5px;color:var(--navy);line-height:1;margin-bottom:4px;letter-spacing:-.5px;}
+.price-period{font-size:12px;color:var(--mgray);margin-bottom:24px;}
+.price-features{list-style:none;margin-bottom:28px;}
+.price-features li{font-size:13px;color:var(--dark);padding:6px 0 6px 20px;position:relative;line-height:1.5;}
+.price-features li::before{content:"";position:absolute;left:0;top:13px;width:5px;height:5px;background:var(--gold);border-radius:50%;}
+.price-features li.locked{color:var(--mgray);}
+.price-features li.locked::before{background:var(--border);}
+.btn-purchase{width:100%;padding:14px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:var(--transition);text-align:center;display:block;border-radius:8px;letter-spacing:.01em;}
+.btn-purchase.primary-p{background:var(--navy);color:#fff;}
+.btn-purchase.primary-p:hover{background:var(--navy-light);transform:translateY(-1px);box-shadow:var(--shadow-md);}
+.btn-purchase.secondary-p{background:#fff;color:var(--navy);border:1.5px solid var(--border);}
+.btn-purchase.secondary-p:hover{border-color:var(--navy);background:var(--off);}
+.guarantee{margin-top:24px;text-align:center;font-size:12px;color:var(--mgray);line-height:1.6;}
+
+/* LOGIN */
+.login-shell{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;}
+@media(max-width:768px){.login-shell{grid-template-columns:1fr;}.login-left{display:none;}}
+.login-left{background:var(--navy);padding:56px 52px;display:flex;flex-direction:column;justify-content:space-between;position:relative;}
+.login-left::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);}
+.ll-logo{font-family:'Inter',sans-serif;font-size:22px;color:#fff;font-weight:700;}
+.ll-logo span{color:var(--gold);}
+.ll-title{font-family:'Inter',sans-serif;font-size:32px;color:#fff;font-weight:700;line-height:1.15;margin-bottom:16px;letter-spacing:-.4px;}
+.ll-title em{color:var(--gold);font-style:normal;}
+.ll-sub{font-size:14px;color:rgba(255,255,255,.48);line-height:1.72;}
+.ll-list{margin-top:28px;}
+.ll-item{font-size:12px;color:rgba(255,255,255,.32);padding:6px 0;border-bottom:.5px solid rgba(255,255,255,.05);display:flex;gap:10px;}
+.ll-item span{color:rgba(201,168,76,.7);font-weight:600;min-width:20px;}
+.login-right{background:#fff;padding:56px 52px;display:flex;flex-direction:column;justify-content:center;}
+.lr-eyebrow{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--mgray);text-transform:uppercase;margin-bottom:12px;}
+.lr-title{font-size:22px;font-weight:700;color:var(--navy);margin-bottom:6px;letter-spacing:-.4px;}
+.lr-sub{font-size:14px;color:var(--mgray);margin-bottom:32px;line-height:1.65;}
+.login-tabs{display:flex;margin-bottom:28px;border-bottom:1px solid var(--border);}
+.ltab{padding:10px 20px;font-size:13px;font-weight:500;cursor:pointer;color:var(--mgray);border-bottom:2px solid transparent;margin-bottom:-1px;transition:var(--transition);}
+.ltab.active{color:var(--navy);border-bottom-color:var(--navy);font-weight:600;}
+.form-group{margin-bottom:18px;}
+.form-label{font-size:12px;font-weight:600;color:var(--dark);margin-bottom:7px;display:block;letter-spacing:.01em;}
+.form-input{width:100%;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;color:var(--dark);background:var(--off);border:1.5px solid var(--border);border-radius:var(--radius);outline:none;transition:var(--transition);}
+.form-input:focus{border-color:var(--navy);background:#fff;box-shadow:0 0 0 3px rgba(15,31,61,.07);}
+.btn-login{width:100%;padding:13px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;background:var(--navy);color:#fff;border:none;cursor:pointer;margin-top:8px;transition:var(--transition);border-radius:8px;letter-spacing:.01em;}
+.btn-login:hover{background:var(--navy-light);transform:translateY(-1px);box-shadow:var(--shadow-md);}
+.btn-login:active{transform:translateY(0);}
+.login-footer{margin-top:20px;font-size:13px;color:var(--mgray);text-align:center;}
+.login-footer a{color:var(--navy);cursor:pointer;font-weight:500;text-decoration:none;}
+.login-footer a:hover{text-decoration:underline;}
+
+@media(max-width:768px){
+  .hero-inner,.main-wrap,.progress-inner{padding-left:24px;padding-right:24px;}
+  .pw-header,.pw-results{padding-left:28px;padding-right:28px;}
+  .dash-layout{flex-direction:column;}
+  .nav{width:100%;min-height:auto;}
+}
+
+/* WIDGET SHARED */
+.bgt-tab-el{padding:12px 20px;font-size:13px;cursor:pointer;color:var(--mgray);border-bottom:2px solid transparent;transition:var(--transition);margin-bottom:-1px;font-weight:400;}
+.bgt-tab-el.act{color:var(--navy);font-weight:600;border-bottom-color:var(--navy);}
+.pres-card{background:var(--off);border:1.5px solid var(--border);padding:18px 20px;cursor:pointer;transition:var(--transition);position:relative;border-radius:var(--radius-lg);}
+.pres-card:hover{border-color:var(--navy);background:#fff;box-shadow:var(--shadow-sm);}
+.pres-card.done{border-color:var(--green);background:#fff;}
+.pres-card.done::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);border-radius:var(--radius-lg) var(--radius-lg) 0 0;}
+.pil-card{background:#fff;border:1.5px solid var(--border);margin-bottom:14px;overflow:hidden;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);}
+.pil-hdr{display:flex;align-items:stretch;}
+.pil-num{background:var(--navy);color:var(--gold);font-family:'Inter',sans-serif;font-size:26px;font-weight:700;width:60px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pil-hdr-txt{padding:16px 20px;flex:1;}
+.pil-name{font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
+.pil-title{font-size:16px;font-weight:600;color:var(--navy);margin-bottom:4px;letter-spacing:-.2px;}
+.pil-body{padding:20px 24px;border-top:1px solid var(--border);}
+.pil-q{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.pil-q:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.pil-q-txt{font-size:13px;color:var(--mgray);margin-bottom:8px;line-height:1.5;}
+.pil-a{font-size:14px;color:var(--dark);line-height:1.65;background:var(--off);border-left:3px solid var(--gold);padding:11px 15px;font-style:italic;border-radius:0 var(--radius) var(--radius) 0;}
+.day-col-hdr{background:var(--navy);padding:12px 16px;}
+.day-col-time{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;opacity:.8;}
+.day-col-nm{font-size:13px;font-weight:600;color:#fff;letter-spacing:-.1px;}
+.day-task-row{display:flex;align-items:flex-start;gap:10px;padding:11px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 150ms;}
+.day-task-row:last-child{border-bottom:none;}
+.day-task-row:hover{background:var(--off);}
+.day-chkbox{width:16px;height:16px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:var(--transition);}
+.day-task-row.done .day-chkbox{background:var(--green);border-color:var(--green);}
+.day-chkbox svg{width:9px;height:9px;fill:#fff;display:none;}
+.day-task-row.done .day-chkbox svg{display:block;}
+.day-task-row.done .day-task-txt{color:var(--mgray);text-decoration:line-through;text-decoration-color:var(--border);}
+.day-task-txt{font-size:12px;color:var(--dark);line-height:1.55;}
+.tl-phase-tab{flex:1;text-align:center;padding:12px 6px;cursor:pointer;background:#fff;border:1px solid var(--border);border-right:none;transition:var(--transition);}
+.tl-phase-tab:last-child{border-right:1px solid var(--border);}
+.tl-phase-tab.act{background:var(--navy);border-color:var(--navy);}
+.tl-phase-tab:hover:not(.act){background:var(--off);}
+.tl-tab-num{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px;}
+.tl-phase-tab.act .tl-tab-num{color:var(--gold);}
+.tl-phase-tab:not(.act) .tl-tab-num{color:var(--mgray);}
+.tl-tab-name{font-size:11px;font-weight:500;}
+.tl-phase-tab.act .tl-tab-name{color:#fff;}
+.tl-phase-tab:not(.act) .tl-tab-name{color:var(--mgray);}
+.tl-ms-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius);padding:14px;cursor:pointer;transition:var(--transition);position:relative;}
+.tl-ms-card:hover{border-color:var(--navy);box-shadow:var(--shadow-sm);}
+.tl-ms-card.done{border-color:var(--green);}
+.tl-ms-card.done::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);border-radius:var(--radius) var(--radius) 0 0;}
+.tl-ms-row{display:flex;align-items:flex-start;gap:10px;}
+.tl-ms-box{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:var(--transition);}
+.tl-ms-card.done .tl-ms-box{background:var(--green);border-color:var(--green);}
+.tl-ms-box svg{width:10px;height:10px;fill:#fff;display:none;}
+.tl-ms-card.done .tl-ms-box svg{display:block;}
+.tl-ms-txt{font-size:13px;color:var(--dark);line-height:1.5;}
+.tl-ms-card.done .tl-ms-txt{color:var(--mgray);}
+.gl-entry{padding:18px 20px;border-bottom:1px solid var(--border);transition:background 150ms;}
+.gl-entry:hover{background:var(--off);}
+.gl-entry:last-child{border-bottom:none;}
+.gl-term{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:6px;letter-spacing:-.2px;}
+.gl-cat{display:inline-block;padding:2px 8px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;border-radius:4px;}
+.gl-def{font-size:13px;color:var(--dark);line-height:1.68;}
+.gl-def mark{background:rgba(201,168,76,.2);border-radius:3px;padding:0 2px;}
+.cat-finance{background:#EBF4FE;color:#1A5FAB;}
+.cat-electoral{background:#EEFAF3;color:#1A7A4A;}
+.cat-strategy{background:var(--gold-light);color:#7A5C00;}
+.cat-party{background:#FEF0F8;color:#9A1F6B;}
+.cat-media{background:#F4EFFE;color:#6B21C9;}
+</style>
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<div class="pw-gate" id="pwGate">
+  <div class="pw-box">
+    <div class="pw-logo"><svg width="160" height="36" viewBox="0 0 160 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+  <rect x="0" y="8" width="4" height="16" rx="1" fill="rgba(255,255,255,0.45)"/>
+  <rect x="6" y="3" width="4" height="21" rx="1" fill="#C9A84C"/>
+  <rect x="12" y="12" width="4" height="12" rx="1" fill="rgba(255,255,255,0.45)"/>
+  <text x="22" y="22" font-family="DM Sans, sans-serif" font-size="14" font-weight="500" fill="#ffffff" letter-spacing="1.5">GROUNDWORK</text>
+  <line x1="22" y1="28" x2="158" y2="28" stroke="#C9A84C" stroke-width="1"/>
+</svg></div>
+    <div class="pw-title">Enter your access code</div>
+    <div class="pw-sub">Use the code from your purchase confirmation. Haven't purchased yet? Complete the free assessment below first.</div>
+    <input class="pw-input" type="password" id="pwInput" placeholder="Access code" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="pw-btn" onclick="checkPw()">Access my dashboard</button>
+    <div class="pw-error" id="pwError">Incorrect code — please try again.</div>
+    <div class="pw-back">Don't have a code? <a onclick="hidePwGate()">Go back to the assessment</a></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SCREEN 1: LANDING + ASSESSMENT
+════════════════════════════════ -->
+<div id="landingScreen" class="screen active">
+
+  <div class="hero">
+    <div class="hero-accent"></div>
+    <div class="hero-inner">
+      <div style="margin-bottom:36px;">
+        <svg width="300" height="60" viewBox="0 0 300 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="13" width="8" height="34" rx="1.5" fill="rgba(255,255,255,0.35)"/>
+          <rect x="12" y="2" width="8" height="46" rx="1.5" fill="#C9A84C"/>
+          <rect x="24" y="22" width="8" height="26" rx="1.5" fill="rgba(255,255,255,0.35)"/>
+          <text x="42" y="38" font-family="DM Sans, sans-serif" font-size="30" font-weight="500" fill="#ffffff" letter-spacing="3">GROUNDWORK</text>
+          <line x1="42" y1="50" x2="298" y2="50" stroke="#C9A84C" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="hero-eyebrow">First-Time Candidate Starter Kit</div>
+      <h1 class="hero-title">From ready to run.<br>To <em>ready to win.</em></h1>
+      <p class="hero-sub">Before you file, fundraise, or announce — answer these questions honestly. No score. No judgment. But you'll know exactly where you stand.</p>
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:0;">
+        <button class="hero-cta" onclick="startAssessment()">Begin the 3 Pillars Assessment &rarr;</button>
+        <button class="hero-cta" style="background:rgba(255,255,255,.06);border:1.5px solid rgba(201,168,76,.4);color:var(--gold);font-size:13px;padding:12px 24px;border-radius:8px;font-weight:500;letter-spacing:.01em;" onclick="loadDemo()">Try a demo &rarr;</button>
+        <button class="hero-cta" style="background:none;border:none;color:rgba(255,255,255,.3);font-size:13px;padding:12px 0;cursor:pointer;font-family:Inter,sans-serif;letter-spacing:.01em;" onclick="showPwGate()">Already purchased? Sign in</button>
+      </div>
+      <div class="hero-kit-label">
+        <div class="kit-item"><span>01</span>3 Pillars Self-Assessment</div>
+        <div class="kit-item"><span>02</span>Campaign Timeline</div>
+        <div class="kit-item"><span>03</span>Filing Requirements</div>
+        <div class="kit-item"><span>04</span>Budget Baseline</div>
+        <div class="kit-item"><span>05</span>Political Glossary</div>
+        <div class="kit-item"><span>06</span>Press Release Templates</div>
+        <div class="kit-item"><span>07</span>Comms &amp; Launch Strategy</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-inner">
+      <div class="progress-label" id="progressLabel">Pillar 1 — Purpose</div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-pct" id="progressPct">0%</div>
+    </div>
+  </div>
+
+  <div class="main-wrap" id="mainContent">
+
+    <div class="s-header" id="header-p1">
+      <div class="s-num">Pillar 1 of 3</div>
+      <div class="s-title">Purpose — Your Why</div>
+      <div class="s-desc">The foundation. What drives you? This is the thing that will sustain you through the hard moments and attract people to your cause.</div>
+    </div>
+    <div class="callout" id="callout-kennedy">
+      <strong>The Cautionary Tale</strong>
+      In 1979, Senator Ted Kennedy was asked simply why he wanted to be president. He had no clear answer. It didn't just hurt that moment — it unraveled his entire campaign. Your 'why' must be visceral, clear, and true. Everything else is built on top of it.
+    </div>
+    <div class="q-card" id="q-name">
+      <div class="q-lbl">Before we begin</div>
+      <div class="q-txt">What's your name?</div>
+      <input type="text" id="candidateName" placeholder="First and last name..." oninput="onNameInput()"
+        style="width:100%;padding:14px 16px;font-family:'Inter',sans-serif;font-size:15px;color:var(--dark);background:var(--off);border:1px solid var(--border);outline:none;transition:all .15s;">
+    </div>
+    <div class="q-card" id="q1"><div class="q-lbl">Question 1 of 10</div><div class="q-txt">In one sentence, why are you running? If it takes more than one sentence, keep working on it.</div><textarea class="q-ta" id="a1" placeholder="Write your one-sentence why..." oninput="onAnswer('a1')"></textarea></div>
+    <div class="q-card" id="q2"><div class="q-lbl">Question 2 of 10</div><div class="q-txt">When you imagine your first town hall, what problem are you there to solve?</div><textarea class="q-ta" id="a2" placeholder="Describe the problem..." oninput="onAnswer('a2')"></textarea></div>
+    <div class="q-card" id="q3"><div class="q-lbl">Question 3 of 10</div><div class="q-txt">Have you shared your 'why' with someone who will be brutally honest with you? What did they say?</div><textarea class="q-ta" id="a3" placeholder="What did they tell you..." oninput="onAnswer('a3')"></textarea></div>
+
+    <div class="s-header" id="header-p2">
+      <div class="s-num">Pillar 2 of 3</div>
+      <div class="s-title">Opening — Your Opportunity</div>
+      <div class="s-desc">Is there a real lane for you? This forces you to honestly assess the electoral landscape — not just whether you want to run, but whether there is a real path to winning.</div>
+    </div>
+
+    <div class="q-card" id="q4">
+      <div class="q-lbl">Question 4 of 10</div>
+      <div class="q-txt">What is the specific seat you're targeting, and why this one?</div>
+      <div id="map-wrap">
+        <div class="map-hint">Click your state to begin</div>
+        <div style="position:relative;">
+          <div id="map-tooltip"></div>
+          <svg id="usmap" viewBox="0 0 960 600" preserveAspectRatio="xMidYMid meet" style="display:block;width:100%;"></svg>
+        </div>
+      </div>
+      <div class="map-state-panel" id="statePanel">
+        <div class="map-state-name" id="stateName"></div>
+        <div class="map-state-hint">Now tell us more about your race.</div>
+        <div class="map-cascade-label">What type of race?</div>
+        <div class="race-grid">
+          <button class="race-btn" data-race="City Council" onclick="selectRace(this)">City Council</button>
+          <button class="race-btn" data-race="County Commission" onclick="selectRace(this)">County Commission</button>
+          <button class="race-btn" data-race="School Board" onclick="selectRace(this)">School Board</button>
+          <button class="race-btn" data-race="State Legislature" onclick="selectRace(this)">State Legislature</button>
+          <button class="race-btn" data-race="Mayor" onclick="selectRace(this)">Mayor</button>
+          <button class="race-btn" data-race="District Attorney" onclick="selectRace(this)">District Attorney</button>
+          <button class="race-btn" data-race="Judicial" onclick="selectRace(this)">Judicial</button>
+          <button class="race-btn" data-race="Other Local" onclick="selectRace(this)">Other local office</button>
+        </div>
+        <div class="map-county-wrap" id="countyWrap">
+          <div class="map-cascade-label" id="countyLabel">Which city or municipality?</div>
+          <input class="map-county-input" id="countyInput" type="text" placeholder="e.g. City of Austin, Travis County..." oninput="onCountyInput()">
+        </div>
+        <button class="map-confirm-btn" id="mapConfirmBtn" onclick="confirmRace()">Confirm my race &rarr;</button>
+      </div>
+      <div class="map-confirmed" id="mapConfirmed">
+        <div class="map-confirmed-label">Your race</div>
+        <div class="map-confirmed-value" id="mapConfirmedValue"></div>
+        <span class="map-change-link" onclick="resetMap()">Change</span>
+      </div>
+      <input type="hidden" id="a4" value="">
+    </div>
+
+    <div class="q-card" id="q5"><div class="q-lbl">Question 5 of 10</div><div class="q-txt">Is this an open seat, a primary challenge, or a general election against an incumbent?</div><textarea class="q-ta" id="a5" placeholder="Describe your race type and path..." oninput="onAnswer('a5')"></textarea></div>
+    <div class="q-card" id="q6"><div class="q-lbl">Question 6 of 10</div><div class="q-txt">Who else is likely to run? What do you offer that they don't?</div><textarea class="q-ta" id="a6" placeholder="Name likely opponents and your differentiator..." oninput="onAnswer('a6')"></textarea></div>
+    <div class="q-card" id="q7"><div class="q-lbl">Question 7 of 10</div><div class="q-txt">Why is now the right time — for you, and for your community?</div><textarea class="q-ta" id="a7" placeholder="What makes this moment the right one..." oninput="onAnswer('a7')"></textarea></div>
+
+    <div class="s-header" id="header-p3">
+      <div class="s-num">Pillar 3 of 3</div>
+      <div class="s-title">Resources — Your Means</div>
+      <div class="s-desc">Resources are not fixed — you build them. But you need an honest baseline.</div>
+    </div>
+    <div class="q-card" id="q8"><div class="q-lbl">Question 8 of 10</div><div class="q-txt">How much time can you realistically commit per week to this campaign?</div><textarea class="q-ta" id="a8" placeholder="Be honest — hours per week, constraints..." oninput="onAnswer('a8')"></textarea></div>
+    <div class="q-card" id="q9"><div class="q-lbl">Question 9 of 10</div><div class="q-txt">How many people would take your call today, and how many would donate if you asked?</div><textarea class="q-ta" id="a9" placeholder="Estimate honestly..." oninput="onAnswer('a9')"></textarea></div>
+    <div class="q-card" id="q10"><div class="q-lbl">Question 10 of 10</div><div class="q-txt">Have you had an honest conversation with your family about what this will cost them?</div><textarea class="q-ta" id="a10" placeholder="What did that conversation reveal..." oninput="onAnswer('a10')"></textarea></div>
+
+    <div class="nav-row" id="navRow">
+      <button class="btn-back" id="btnBack" onclick="goBack()">Back</button>
+      <button class="btn-next" id="btnNext" onclick="goNext()">Continue</button>
+      <span class="nav-hint" id="navHint">Answer to continue</span>
+    </div>
+
+    <div class="paywall" id="paywall">
+      <div class="pw-header">
+        <div class="pw-eyebrow">Assessment Complete</div>
+        <div class="pw-title">You've done the honest work.<br>Here's what comes next.</div>
+        <div class="pw-sub">Your answers are saved below. Already purchased? Sign in to your dashboard to access your full toolkit.</div>
+      </div>
+      <div class="pw-results">
+        <div class="r-label">Your Assessment — Three Pillars</div>
+        <div id="pillarResults"></div>
+        <div class="divider">
+          <div class="r-label">Your Complete Toolkit</div>
+          <p style="font-size:15px;color:var(--mgray);line-height:1.7;">The full kit — timeline, filing requirements, budget template, glossary, press release builder, and launch strategy — is ready. Already purchased? <a onclick="showPwGate()" style="color:var(--navy);cursor:pointer;text-decoration:underline;">Access your dashboard here.</a></p>
+        </div>
+        <div class="pricing-grid">
+          <div class="price-card">
+            <div class="price-name">Starter Kit</div>
+            <div class="price-amt">$29</div>
+            <div class="price-period">one-time</div>
+            <ul class="price-features">
+              <li>3 Pillars Assessment (PDF)</li>
+              <li>Campaign Timeline — Excel</li>
+              <li>Filing Requirements Cheat Sheet</li>
+              <li>Filing Deadline Tracker — Excel</li>
+              <li>Budget Baseline — Excel</li>
+              <li>Political Glossary</li>
+              <li>Press Release Templates — Word</li>
+              <li>Communications &amp; Launch Strategy</li>
+              <li class="locked">Week-by-Week Calendar</li>
+              <li class="locked">Donor Call Scripts</li>
+              <li class="locked">AI Filing Requirements Builder</li>
+            </ul>
+            <button class="btn-purchase secondary-p" onclick="showPwGate()">Get the Starter Kit</button>
+          </div>
+          <div class="price-card featured">
+            <div class="price-badge">Most Complete</div>
+            <div class="price-name">Full Playbook</div>
+            <div class="price-amt">$89</div>
+            <div class="price-period">one-time</div>
+            <ul class="price-features">
+              <li>Everything in the Starter Kit</li>
+              <li>Week-by-Week Campaign Calendar</li>
+              <li>Donor Call Scripts</li>
+              <li>Voter Outreach Templates</li>
+              <li>Volunteer Management System</li>
+              <li>Opposition Research Framework</li>
+              <li>Election Day Operations Guide</li>
+              <li>AI-Powered Filing Requirements Builder</li>
+            </ul>
+            <button class="btn-purchase primary-p" onclick="showPwGate()">Get the Full Playbook</button>
+          </div>
+        </div>
+        <div class="guarantee">30-day money-back guarantee &nbsp;&middot;&nbsp; Instant download &nbsp;&middot;&nbsp; Politically nonpartisan</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SCREEN 2: DASHBOARD + COMPONENTS
+════════════════════════════════ -->
+<div id="dashboardScreen" class="screen">
+  <div class="dash-layout">
+
+    <!-- SHARED NAV -->
+    <div class="nav">
+      <div class="nav-logo" onclick="goHome()" style="cursor:pointer;"><svg width="160" height="36" viewBox="0 0 160 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+  <rect x="0" y="8" width="4" height="16" rx="1" fill="rgba(255,255,255,0.45)"/>
+  <rect x="6" y="3" width="4" height="21" rx="1" fill="#C9A84C"/>
+  <rect x="12" y="12" width="4" height="12" rx="1" fill="rgba(255,255,255,0.45)"/>
+  <text x="22" y="22" font-family="DM Sans, sans-serif" font-size="14" font-weight="500" fill="#ffffff" letter-spacing="1.5">GROUNDWORK</text>
+  <line x1="22" y1="28" x2="158" y2="28" stroke="#C9A84C" stroke-width="1"/>
+</svg></div>
+      <div class="nav-user">
+        <div class="nav-user-name" id="navName">Candidate</div>
+        <div class="nav-user-race" id="navRace">Your race</div>
+        <div class="nav-tier">Starter Kit</div>
+      </div>
+      <div class="nav-items">
+        <div class="nav-section">Campaign</div>
+        <div class="nav-item" id="nav-dashboard" onclick="showView('dashboard')">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>Dashboard
+        </div>
+        <div class="nav-item" id="nav-pillars" onclick="showView('pillars')">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7V4zm0 6h2v2H7v-2z"/></svg>3 Pillars Results
+        </div>
+        <div class="nav-item" id="nav-timeline" onclick="showView('timeline')">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="3" width="14" height="2" rx="1"/><rect x="1" y="7" width="14" height="2" rx="1"/><rect x="1" y="11" width="8" height="2" rx="1"/></svg>Campaign Timeline
+        </div>
+        <div class="nav-item" id="nav-filing" onclick="showView('filing')">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M3 2h10a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1zm1 3v1h8V5H4zm0 3v1h8V8H4zm0 3v1h5v-1H4z"/></svg>Filing Requirements
+        </div>
+        <div class="nav-item" id="nav-budget" onclick="showView('budget')">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2h12v2H2V2zm0 4h12v2H2V6zm0 4h8v2H2v-2z"/></svg>Budget Planner
+        </div>
+        <div class="nav-section">Resources</div>
+        <div class="nav-item" id="nav-glossary" onclick="showView('glossary')">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l2 4 5 .7-3.6 3.5.8 5L8 11.8l-4.2 2.2.8-5L1 5.7 6 5z"/></svg>Glossary
+        </div>
+        <div class="nav-item" id="nav-pressrelease" onclick="showView('pressrelease')">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2h12v2H2zm2 3h8v1H4zm0 3h8v1H4zm0 3h5v1H4z"/></svg>Press Release
+        </div>
+        <div class="nav-item" id="nav-comms" onclick="showView('comms')">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M14 2H2v10h4l2 3 2-3h4V2z"/></svg>Comms &amp; Launch
+        </div>
+        <div class="nav-item locked">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M11 7V5a3 3 0 00-6 0v2H4v7h8V7h-1zM7 5a1 1 0 012 0v2H7V5z"/></svg>
+          Call Scripts <span class="lbadge">PRO</span>
+        </div>
+        <div class="nav-item locked">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M11 7V5a3 3 0 00-6 0v2H4v7h8V7h-1zM7 5a1 1 0 012 0v2H7V5z"/></svg>
+          Voter Outreach <span class="lbadge">PRO</span>
+        </div>
+        <div class="nav-item locked">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M11 7V5a3 3 0 00-6 0v2H4v7h8V7h-1zM7 5a1 1 0 012 0v2H7V5z"/></svg>
+          AI Filing Builder <span class="lbadge">PRO</span>
+        </div>
+      </div>
+      <div class="nav-upgrade">
+        <p>Unlock call scripts, voter outreach, and the AI filing builder.</p>
+        <button>Upgrade to Full Playbook</button>
+      </div>
+      <div class="nav-logout" onclick="doLogout()">Sign out</div>
+    </div>
+
+    <!-- MAIN AREA — views swap here -->
+    <div class="dash-main-area" id="dashMainArea">
+
+      <!-- DASHBOARD VIEW -->
+      <div id="view-dashboard">
+        <div class="topbar">
+          <div class="topbar-title">Campaign Dashboard</div>
+          <div class="topbar-right"><div class="crumb">Kit &rsaquo; <span>Dashboard</span></div></div>
+        </div>
+        <div class="page-wrap">
+          <div class="welcome-banner">
+            <div class="wb-eyebrow">Good to have you back</div>
+            <div class="wb-title" id="welcomeTitle">Welcome — let's get to work.</div>
+            <div class="wb-sub" id="wbSub">You're in Formation. Your legal and financial infrastructure should be your focus right now.</div>
+          </div>
+          <div class="stats-3">
+            <div class="stat-c"><div class="stat-lbl">Current Phase</div><div class="stat-val" id="statPhase">2 of 6</div><div class="stat-s" id="statPhaseSub">Formation</div></div>
+            <div class="stat-c"><div class="stat-lbl">Assessment</div><div class="stat-val">100%</div><div class="stat-s" id="statAssessmentSub">All 3 pillars complete</div></div>
+            <div class="stat-c"><div class="stat-lbl">Race</div><div class="stat-val" id="statRace" style="font-size:14px;line-height:1.3;">—</div><div class="stat-s" id="statRaceSub">From your assessment</div></div>
+          </div>
+          <div class="phase-card">
+            <div class="card-hdr"><div class="card-hdr-title">Campaign Arc</div><div class="card-hdr-sub">6 phases to Election Day</div></div>
+            <div class="phase-track">
+              <div class="ps done"><div class="ps-bar"></div><div class="ps-lbl">Exploratory</div></div>
+              <div class="ps cur"><div class="ps-bar"></div><div class="ps-lbl">Formation</div></div>
+              <div class="ps"><div class="ps-bar"></div><div class="ps-lbl">Launch</div></div>
+              <div class="ps"><div class="ps-bar"></div><div class="ps-lbl">Build</div></div>
+              <div class="ps"><div class="ps-bar"></div><div class="ps-lbl">Closing</div></div>
+              <div class="ps"><div class="ps-bar"></div><div class="ps-lbl">Election Day</div></div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+            <div style="font-size:13px;font-weight:500;color:var(--navy);letter-spacing:.04em;text-transform:uppercase;">Your Toolkit</div>
+          </div>
+          <div class="grid-2">
+            <div class="comp-c" onclick="showView('pillars')"><div class="comp-num">Component 01</div><div class="comp-name">3 Pillars Self-Assessment</div><div class="comp-desc">Your Purpose, Opening, and Resources — the foundation everything else is built on.</div><div class="comp-status done"><span class="sdot done"></span>Completed</div></div>
+            <div class="comp-c" onclick="showView('timeline')"><div class="comp-num">Component 02</div><div class="comp-name">Campaign Timeline</div><div class="comp-desc">Six-phase milestone checklist from exploratory through election day.</div><div class="comp-status active"><span class="sdot active"></span>In progress — Phase 2</div></div>
+            <div class="comp-c" onclick="showView('filing')"><div class="comp-num">Component 03</div><div class="comp-name">Filing Requirements</div><div class="comp-desc">The five questions every candidate must answer before filing.</div><div class="comp-status active"><span class="sdot active"></span>Not started</div></div>
+            <div class="comp-c" onclick="showView('budget')"><div class="comp-num">Component 04</div><div class="comp-name">Budget Planner</div><div class="comp-desc">Five-tier budget template plus the call time tracker.</div><div class="comp-status active"><span class="sdot active"></span>Not started</div></div>
+            <div class="comp-c" onclick="showView('glossary')"><div class="comp-num">Component 05</div><div class="comp-name">Political Glossary</div><div class="comp-desc">43 terms across five categories — searchable and bookmarkable.</div><div class="comp-status active"><span class="sdot active"></span>Not started</div></div>
+            <div class="comp-c" onclick="showView('pressrelease')"><div class="comp-num">Component 06</div><div class="comp-name">Press Release Builder</div><div class="comp-desc">Pre-filled from your assessment. Edit and export.</div><div class="comp-status active"><span class="sdot active"></span>Not started</div></div>
+          </div>
+          <div class="comp-c" style="margin-bottom:24px;" onclick="showView('comms')"><div class="comp-num">Component 07</div><div class="comp-name">Communications &amp; Launch Strategy</div><div class="comp-desc">Digital presence checklist, launch video guide, announcement day plan, content calendar, and compliance requirements.</div><div class="comp-status active"><span class="sdot active"></span>Not started</div></div>
+          <div style="font-size:13px;font-weight:500;color:var(--navy);letter-spacing:.04em;text-transform:uppercase;margin-bottom:14px;">Downloads</div>
+          <div class="grid-3">
+            <div class="dl-c"><div class="dl-icon">XL</div><div><div class="dl-name">Campaign Timeline</div><div class="dl-fmt">Excel workbook</div></div></div>
+            <div class="dl-c"><div class="dl-icon">XL</div><div><div class="dl-name">Budget Template</div><div class="dl-fmt">Excel workbook</div></div></div>
+            <div class="dl-c"><div class="dl-icon">XL</div><div><div class="dl-name">Filing Tracker</div><div class="dl-fmt">Excel workbook</div></div></div>
+            <div class="dl-c"><div class="dl-icon">WD</div><div><div class="dl-name">Press Release Templates</div><div class="dl-fmt">Word document</div></div></div>
+            <div class="dl-c locked-dl"><div class="dl-icon" style="opacity:.3">WD</div><div style="opacity:.3"><div class="dl-name">Donor Call Scripts</div><div class="dl-fmt">Word document</div></div><div class="dl-blur">Full Playbook</div></div>
+            <div class="dl-c locked-dl"><div class="dl-icon" style="opacity:.3">WD</div><div style="opacity:.3"><div class="dl-name">Voter Outreach Templates</div><div class="dl-fmt">Word document</div></div><div class="dl-blur">Full Playbook</div></div>
+          </div>
+          <div style="font-size:13px;font-weight:500;color:var(--navy);letter-spacing:.04em;text-transform:uppercase;margin-bottom:14px;">Full Playbook — Unlock More</div>
+          <div class="grid-2">
+            <div class="comp-c locked-c"><div class="comp-num" style="color:var(--mgray)">Pro Feature</div><div class="comp-name" style="color:var(--mgray)">Week-by-Week Calendar</div><div class="comp-desc">Detailed operational calendar from announcement through election day.</div><div class="blur-ov"><div class="blur-lock"><svg viewBox="0 0 16 16"><path d="M11 7V5a3 3 0 00-6 0v2H4v7h8V7h-1zM7 5a1 1 0 012 0v2H7V5z"/></svg></div><div class="blur-txt">Full Playbook</div><button class="blur-btn-el">Upgrade — $89</button></div></div>
+            <div class="comp-c locked-c"><div class="comp-num" style="color:var(--mgray)">Pro Feature</div><div class="comp-name" style="color:var(--mgray)">AI Filing Requirements Builder</div><div class="comp-desc">Personalized filing checklist for your state and race type.</div><div class="blur-ov"><div class="blur-lock"><svg viewBox="0 0 16 16"><path d="M11 7V5a3 3 0 00-6 0v2H4v7h8V7h-1zM7 5a1 1 0 012 0v2H7V5z"/></svg></div><div class="blur-txt">Full Playbook</div><button class="blur-btn-el">Upgrade — $89</button></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPONENT VIEWS (shell pages — full widgets load inline) -->
+      <div id="view-pillars" style="display:none;">
+        <div class="topbar">
+          <div class="topbar-title">3 Pillars Self-Assessment</div>
+          <div class="topbar-right">
+            <button class="btn-s" onclick="showView('dashboard')">← Dashboard</button>
+          </div>
+        </div>
+        <div class="comp-banner">
+          <div class="cb-eyebrow">Component 01 — Complete</div>
+          <div class="cb-title" id="pillarsBannerTitle">Your assessment results.</div>
+          <div class="cb-sub">Your Purpose, Opening, and Resources — reflected back. Come back to these on the hard days. They are the reason you are running.</div>
+        </div>
+
+        <div style="padding:24px 32px;">
+
+          <!-- STRENGTH BARS -->
+          <div style="background:var(--navy);padding:24px 28px;margin-bottom:20px;position:relative;overflow:hidden;">
+            <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold);"></div>
+            <div style="font-size:11px;color:var(--gold);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px;">Pillar strength at a glance</div>
+            <div style="display:flex;gap:24px;" id="pillarStrengthBars">
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.5);margin-bottom:5px;"><span>Purpose</span><span id="pBar1Pct">—</span></div>
+                <div style="height:4px;background:rgba(255,255,255,.12);"><div id="pBar1" style="height:100%;background:var(--gold);transition:width .6s ease;width:0%;"></div></div>
+              </div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.5);margin-bottom:5px;"><span>Opening</span><span id="pBar2Pct">—</span></div>
+                <div style="height:4px;background:rgba(255,255,255,.12);"><div id="pBar2" style="height:100%;background:var(--gold);transition:width .6s ease;width:0%;"></div></div>
+              </div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.5);margin-bottom:5px;"><span>Resources</span><span id="pBar3Pct">—</span></div>
+                <div style="height:4px;background:rgba(255,255,255,.12);"><div id="pBar3" style="height:100%;background:var(--gold);transition:width .6s ease;width:0%;"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TABS -->
+          <div style="background:#fff;border:1px solid var(--border);">
+            <div style="display:flex;border-bottom:1px solid var(--border);" id="pillarTabRow">
+              <div class="pil-tab act" onclick="pillarTab(this,'answers')" style="padding:12px 20px;font-size:13px;font-weight:500;color:var(--navy);border-bottom:2px solid var(--navy);cursor:pointer;margin-bottom:-1px;">My Answers</div>
+              <div class="pil-tab" onclick="pillarTab(this,'cabinet')" style="padding:12px 20px;font-size:13px;color:var(--mgray);border-bottom:2px solid transparent;cursor:pointer;margin-bottom:-1px;">Kitchen Cabinet</div>
+              <div class="pil-tab" onclick="pillarTab(this,'nextsteps')" style="padding:12px 20px;font-size:13px;color:var(--mgray);border-bottom:2px solid transparent;cursor:pointer;margin-bottom:-1px;">Next Steps</div>
+            </div>
+
+            <!-- MY ANSWERS TAB -->
+            <div id="pil-answers" style="padding:24px;">
+              <div id="pillarAnswersWrap"></div>
+            </div>
+
+            <!-- KITCHEN CABINET TAB -->
+            <div id="pil-cabinet" style="padding:24px;display:none;">
+              <div style="margin-bottom:16px;">
+                <div style="font-size:14px;font-weight:500;color:var(--navy);margin-bottom:4px;">Your Kitchen Cabinet</div>
+                <div style="font-size:13px;color:var(--mgray);line-height:1.6;max-width:520px;">The 3 to 5 trusted people who will tell you the truth when everyone else won't. Add them here so you can track who's in your corner before you file.</div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;" id="cabinetGrid"></div>
+              <div style="background:var(--gold-light);border-top:3px solid var(--gold);padding:16px 20px;">
+                <div style="font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--navy);margin-bottom:6px;">Next Step</div>
+                <div style="font-size:13px;color:var(--dark);line-height:1.65;">Take your assessment answers to your kitchen cabinet before you file. Their honest reaction to your Purpose, Opening, and Resources is the most important input you will get.</div>
+              </div>
+            </div>
+
+            <!-- NEXT STEPS TAB -->
+            <div id="pil-nextsteps" style="padding:24px;display:none;">
+              <div style="font-size:13px;font-weight:500;color:var(--navy);letter-spacing:.04em;text-transform:uppercase;margin-bottom:16px;">Recommended next actions</div>
+              <div id="pillarNextSteps"></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div id="view-timeline" style="display:none;">
+        <div class="topbar">
+          <div class="topbar-title">Campaign Timeline</div>
+          <div class="topbar-right">
+            <button class="btn-s">Download Excel ↓</button>
+            <button class="btn-s" onclick="showView('dashboard')">← Dashboard</button>
+          </div>
+        </div>
+        <div class="comp-banner">
+          <div class="cb-eyebrow">Component 02</div>
+          <div class="cb-title">Campaign Timeline &amp; Milestone Checklist</div>
+          <div class="cb-sub">Six phases from your first honest conversation to Election Night. Check milestones off as you complete them. Advance when you're ready.</div>
+        </div>
+        <div style="padding:24px 32px;">
+
+          <!-- STAT ROW -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+            <div style="background:#fff;border:1px solid var(--border);padding:16px 18px;">
+              <div style="font-size:11px;color:var(--mgray);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;">Current Phase</div>
+              <div style="font-size:22px;font-weight:500;color:var(--navy);" id="tlPhaseVal">Formation</div>
+              <div style="font-size:11px;color:var(--mgray);">Phase 2 of 6</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--border);padding:16px 18px;">
+              <div style="font-size:11px;color:var(--mgray);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;">Milestones Done</div>
+              <div style="font-size:22px;font-weight:500;color:var(--navy);" id="tlDoneVal">0</div>
+              <div style="font-size:11px;color:var(--mgray);" id="tlDoneSub">of 8 this phase</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--border);padding:16px 18px;">
+              <div style="font-size:11px;color:var(--mgray);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;">Key Dates</div>
+              <div style="display:flex;gap:8px;margin-top:4px;">
+                <div style="flex:1;">
+                  <div style="font-size:10px;color:var(--mgray);margin-bottom:3px;">Filing deadline</div>
+                  <input type="date" id="tlFilingDate" style="width:100%;border:none;background:none;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--navy);outline:none;">
+                </div>
+                <div style="flex:1;">
+                  <div style="font-size:10px;color:var(--mgray);margin-bottom:3px;">Election Day</div>
+                  <input type="date" id="tlElectionDate" style="width:100%;border:none;background:none;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--navy);outline:none;">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PHASE STRIP -->
+          <div style="display:flex;margin-bottom:20px;" id="tlStrip"></div>
+
+          <!-- PHASE HEADER -->
+          <div id="tlPhaseHeader" style="background:var(--navy);padding:24px 28px;margin-bottom:16px;position:relative;overflow:hidden;"></div>
+
+          <!-- MILESTONE GRID -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;" id="tlMilestones"></div>
+
+          <!-- READY TO ADVANCE -->
+          <div id="tlRTA" style="background:var(--gold-light);border-top:3px solid var(--gold);padding:20px 24px;margin-bottom:16px;"></div>
+
+          <!-- PHASE NOTES -->
+          <div style="background:#fff;border:1px solid var(--border);padding:16px 20px;">
+            <div style="font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--mgray);margin-bottom:8px;">Phase notes</div>
+            <textarea id="tlNotes" placeholder="Add notes, decisions, or reminders for this phase..."
+              style="width:100%;min-height:64px;border:1px solid var(--border);padding:10px 12px;font-family:'Inter',sans-serif;font-size:13px;color:var(--dark);background:var(--off);resize:none;outline:none;transition:border-color .15s;line-height:1.6;"></textarea>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="view-filing" style="display:none;">
+        <div class="topbar">
+          <div class="topbar-title">Filing Requirements</div>
+          <div class="topbar-right">
+            <button class="btn-s">Download Excel ↓</button>
+            <button class="btn-s" onclick="showView('dashboard')">← Dashboard</button>
+          </div>
+        </div>
+        <div class="comp-banner">
+          <div class="cb-eyebrow" id="filingEyebrow">Component 03 — Personalized for your race</div>
+          <div class="cb-title">Filing Requirements</div>
+          <div class="cb-sub">The five questions every candidate must answer before they file — and exactly where to look for your race.</div>
+        </div>
+
+        <div style="padding:24px 32px;">
+
+          <!-- LOCATION BANNER -->
+          <div style="background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm);">
+            <div>
+              <div style="font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--mgray);margin-bottom:4px;">Showing requirements for</div>
+              <div style="font-size:17px;font-weight:700;color:var(--navy);letter-spacing:-.2px;" id="filingLocationTitle">Texas — City Council — Austin</div>
+              <div style="font-size:12px;color:var(--mgray);margin-top:3px;" id="filingLocationSub">General election · Travis County · Nonpartisan race</div>
+            </div>
+            <span style="font-size:12px;color:var(--mgray);cursor:pointer;text-decoration:underline;white-space:nowrap;">Change location ›</span>
+          </div>
+
+          <!-- AI UPSELL -->
+          <div style="background:var(--gold-light);border:1.5px solid rgba(201,168,76,.3);border-left:3px solid var(--gold);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;">
+            <div style="width:36px;height:36px;background:rgba(201,168,76,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="#7A5C00"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm-.75 4h1.5v5h-1.5V5zm0 6h1.5v1.5h-1.5V11z"/></svg>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:600;color:#7A5C00;margin-bottom:2px;">Get your personalized Austin City Council checklist</div>
+              <div style="font-size:12px;color:#9A7B20;line-height:1.5;">The AI Filing Builder generates a custom checklist with official Texas links, exact deadlines, and Travis County specifics — updated for the current cycle.</div>
+            </div>
+            <button style="padding:9px 18px;background:var(--navy);color:#fff;border:none;border-radius:7px;font-family:Inter,sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:var(--transition);" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform=''">Unlock with Full Playbook</button>
+          </div>
+
+          <!-- DEADLINE CARDS -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;">
+            <div style="background:#fff;border:1.5px solid #FECACA;border-top:3px solid #DC2626;border-radius:var(--radius-lg);padding:16px 18px;box-shadow:var(--shadow-sm);">
+              <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#DC2626;margin-bottom:5px;">Action Required</div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px;">Filing deadline</div>
+              <div style="font-size:20px;font-weight:700;color:var(--navy);letter-spacing:-.3px;">Dec 9, 2024</div>
+              <div style="font-size:11px;color:var(--mgray);margin-top:4px;">Confirm with City Clerk</div>
+            </div>
+            <div style="background:#fff;border:1.5px solid #FED7AA;border-top:3px solid #EA580C;border-radius:var(--radius-lg);padding:16px 18px;box-shadow:var(--shadow-sm);">
+              <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#EA580C;margin-bottom:5px;">Upcoming</div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px;">Campaign finance registration</div>
+              <div style="font-size:20px;font-weight:700;color:var(--navy);letter-spacing:-.3px;">Before fundraising</div>
+              <div style="font-size:11px;color:var(--mgray);margin-top:4px;">Register before you raise a dollar</div>
+            </div>
+            <div style="background:#fff;border:1.5px solid #BBF7D0;border-top:3px solid var(--green);border-radius:var(--radius-lg);padding:16px 18px;box-shadow:var(--shadow-sm);">
+              <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:5px;">On Track</div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px;">First finance report</div>
+              <div style="font-size:20px;font-weight:700;color:var(--navy);letter-spacing:-.3px;">~30 days post-filing</div>
+              <div style="font-size:11px;color:var(--mgray);margin-top:4px;">Confirm exact date with TEC</div>
+            </div>
+          </div>
+
+          <!-- TABS -->
+          <div style="display:flex;border-bottom:1.5px solid var(--border);margin-bottom:0;background:#fff;border-radius:var(--radius-lg) var(--radius-lg) 0 0;border:1.5px solid var(--border);border-bottom:none;">
+            <div class="filing-tab act" onclick="filingTab(this,'questions')" style="padding:13px 22px;font-size:13px;font-weight:600;color:var(--navy);border-bottom:2px solid var(--navy);cursor:pointer;margin-bottom:-1px;transition:var(--transition);">5 Key Questions</div>
+            <div class="filing-tab" onclick="filingTab(this,'tracker')" style="padding:13px 22px;font-size:13px;font-weight:400;color:var(--mgray);border-bottom:2px solid transparent;cursor:pointer;margin-bottom:-1px;transition:var(--transition);">Deadline Tracker</div>
+            <div class="filing-tab" onclick="filingTab(this,'notes')" style="padding:13px 22px;font-size:13px;font-weight:400;color:var(--mgray);border-bottom:2px solid transparent;cursor:pointer;margin-bottom:-1px;transition:var(--transition);">My Notes</div>
+          </div>
+
+          <!-- QUESTIONS TAB -->
+          <div id="filing-questions" style="background:#fff;border:1.5px solid var(--border);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);margin-bottom:20px;">
+            <div id="filingChecklist" style="padding:8px 0;"></div>
+          </div>
+
+          <!-- TRACKER TAB -->
+          <div id="filing-tracker" style="display:none;background:#fff;border:1.5px solid var(--border);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);margin-bottom:20px;overflow:hidden;">
+            <table style="width:100%;border-collapse:collapse;">
+              <thead>
+                <tr style="background:var(--navy);">
+                  <th style="text-align:left;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.5);padding:11px 18px;border-bottom:2px solid var(--gold);width:38%;">Deadline / Milestone</th>
+                  <th style="text-align:left;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.5);padding:11px 18px;border-bottom:2px solid var(--gold);width:22%;">Date</th>
+                  <th style="text-align:left;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.5);padding:11px 18px;border-bottom:2px solid var(--gold);width:16%;">Status</th>
+                  <th style="text-align:left;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.5);padding:11px 18px;border-bottom:2px solid var(--gold);">Notes</th>
+                </tr>
+              </thead>
+              <tbody id="filingTrackerBody"></tbody>
+            </table>
+          </div>
+
+          <!-- NOTES TAB -->
+          <div id="filing-notes" style="display:none;background:#fff;border:1.5px solid var(--border);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);padding:24px;margin-bottom:20px;">
+            <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:4px;">Filing research notes</div>
+            <div style="font-size:12px;color:var(--mgray);margin-bottom:14px;line-height:1.55;">Keep track of calls made, contacts, and anything you learn from official sources.</div>
+            <textarea id="filingNotes" placeholder="e.g. Called City Clerk on Nov 14 — confirmed filing deadline is Dec 9. Spoke with Maria, extension 2241. Petition option requires 500 valid signatures..."
+              style="width:100%;min-height:160px;border:1.5px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-family:Inter,sans-serif;font-size:13px;color:var(--dark);background:var(--off);resize:vertical;outline:none;line-height:1.65;transition:var(--transition);"></textarea>
+            <button style="margin-top:12px;padding:10px 24px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:Inter,sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:var(--transition);"
+              onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform=''">Save notes</button>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="view-budget" style="display:none;">
+        <div class="topbar"><div class="topbar-title">Budget Planner</div><div class="topbar-right"><button class="btn-s">Download Excel ↓</button><button class="btn-s" onclick="showView('dashboard')">← Dashboard</button></div></div>
+        <div class="comp-banner"><div class="cb-eyebrow">Component 04</div><div class="cb-title">Campaign Budget Baseline</div><div class="cb-sub">A realistic five-tier budget template. Use this as a floor, not a ceiling.</div></div>
+        <div style="padding:24px 32px;">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+            <div style="background:#fff;border:1px solid var(--border);border-top:3px solid var(--gold);padding:16px 18px;"><div style="font-size:11px;color:var(--mgray);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;">Total Budget</div><div style="font-size:22px;font-weight:500;color:var(--navy);" id="bgtTotal">$0</div><div style="font-size:11px;color:var(--mgray);">Your planned spend</div></div>
+            <div style="background:#fff;border:1px solid var(--border);padding:16px 18px;"><div style="font-size:11px;color:var(--mgray);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;">Total Raised</div><div style="font-size:22px;font-weight:500;color:var(--navy);" id="bgtRaised">$0</div><div style="font-size:11px;color:var(--mgray);">Enter in fundraising</div></div>
+            <div style="background:#fff;border:1px solid var(--border);padding:16px 18px;"><div style="font-size:11px;color:var(--mgray);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;">Total Spent</div><div style="font-size:22px;font-weight:500;color:var(--navy);" id="bgtSpent">$0</div><div style="font-size:11px;color:var(--mgray);">Actuals entered below</div></div>
+            <div style="background:#fff;border:1px solid var(--border);padding:16px 18px;"><div style="font-size:11px;color:var(--mgray);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;">Remaining</div><div style="font-size:22px;font-weight:500;color:var(--navy);" id="bgtRemain">$0</div><div style="font-size:11px;color:var(--mgray);">Budget minus actuals</div></div>
+          </div>
+          <div style="display:flex;border-bottom:1px solid var(--border);background:#fff;border:1px solid var(--border);border-bottom:none;">
+            <div class="bgt-tab-el act" onclick="bgtTab(this,'tiers')">Budget</div>
+            <div class="bgt-tab-el" onclick="bgtTab(this,'fundraising')">Fundraising</div>
+            <div class="bgt-tab-el" onclick="bgtTab(this,'calltime')">Call Time</div>
+          </div>
+          <div style="background:#fff;border:1px solid var(--border);">
+            <div id="bgt-tiers" style="padding:24px;" ></div>
+            <div id="bgt-fundraising" style="padding:24px;display:none;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+                <div style="background:var(--off);border:1px solid var(--border);padding:18px 20px;">
+                  <div style="font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--mgray);margin-bottom:8px;">Fundraising Goal</div>
+                  <input type="number" id="fGoalInp" value="25000" min="0" oninput="bgtUpdateFundraising()" style="width:100%;border:1px solid var(--border);padding:8px 12px;font-family:'Inter',sans-serif;font-size:18px;font-weight:500;color:var(--navy);background:#fff;outline:none;margin-bottom:8px;">
+                  <div style="font-size:12px;color:var(--mgray);margin-bottom:10px;">Your target for the full campaign</div>
+                  <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--mgray);margin-bottom:4px;"><span>Progress</span><span id="fPct">0%</span></div>
+                  <div style="height:6px;background:var(--border);"><div id="fBar" style="height:100%;background:var(--gold);transition:width .4s;width:0%;"></div></div>
+                </div>
+                <div style="background:var(--off);border:1px solid var(--border);padding:18px 20px;">
+                  <div style="font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--mgray);margin-bottom:8px;">Total Raised to Date</div>
+                  <input type="number" id="fRaisedInp" value="0" min="0" oninput="bgtUpdateFundraising()" style="width:100%;border:1px solid var(--border);padding:8px 12px;font-family:'Inter',sans-serif;font-size:18px;font-weight:500;color:var(--navy);background:#fff;outline:none;margin-bottom:8px;">
+                  <div style="font-size:12px;color:var(--mgray);margin-bottom:10px;">Update as donations come in</div>
+                  <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--mgray);margin-bottom:4px;"><span>Launch goal ($5,000)</span><span id="fLPct">0%</span></div>
+                  <div style="height:6px;background:var(--border);"><div id="fLBar" style="height:100%;background:var(--gold);transition:width .4s;width:0%;"></div></div>
+                </div>
+              </div>
+              <div style="background:var(--gold-light);border-top:3px solid var(--gold);padding:16px 20px;">
+                <div style="font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--navy);margin-bottom:6px;">The most important number</div>
+                <div style="font-size:13px;color:var(--dark);line-height:1.65;">It's not how much you spend — it's how much you raise. Your finance consultant is the first call you make after your kitchen cabinet.</div>
+              </div>
+            </div>
+            <div id="bgt-calltime" style="padding:24px;display:none;">
+              <div style="background:var(--navy);padding:20px 24px;margin-bottom:16px;position:relative;">
+                <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold);"></div>
+                <div style="font-size:11px;color:var(--gold);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;">The thing nobody tells you</div>
+                <div style="font-size:17px;color:#fff;font-weight:500;margin-bottom:4px;">Call time is the most important activity in your campaign.</div>
+                <div style="font-size:13px;color:rgba(255,255,255,.5);line-height:1.6;">10+ hours per week minimum. Treat it like the gym.</div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
+                <div style="background:#fff;border:1px solid var(--border);padding:16px;text-align:center;">
+                  <div style="font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--mgray);margin-bottom:8px;">Weekly goal</div>
+                  <input type="number" id="ctGoal" value="10" min="0" oninput="bgtUpdateCT()" style="width:100%;border:1px solid var(--border);padding:8px;font-family:'Inter',sans-serif;font-size:22px;font-weight:500;color:var(--navy);text-align:center;outline:none;background:var(--off);">
+                  <div style="font-size:11px;color:var(--mgray);margin-top:5px;">hours per week</div>
+                </div>
+                <div style="background:#fff;border:1px solid var(--border);padding:16px;text-align:center;">
+                  <div style="font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--mgray);margin-bottom:8px;">This week</div>
+                  <input type="number" id="ctDone" value="0" min="0" oninput="bgtUpdateCT()" style="width:100%;border:1px solid var(--border);padding:8px;font-family:'Inter',sans-serif;font-size:22px;font-weight:500;color:var(--navy);text-align:center;outline:none;background:var(--off);">
+                  <div style="font-size:11px;color:var(--mgray);margin-top:5px;">hours logged</div>
+                </div>
+                <div style="background:#fff;border:1px solid var(--border);padding:16px;text-align:center;">
+                  <div style="font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--mgray);margin-bottom:8px;">Total calls</div>
+                  <input type="number" value="0" min="0" style="width:100%;border:1px solid var(--border);padding:8px;font-family:'Inter',sans-serif;font-size:22px;font-weight:500;color:var(--navy);text-align:center;outline:none;background:var(--off);">
+                  <div style="font-size:11px;color:var(--mgray);margin-top:5px;">all time</div>
+                </div>
+              </div>
+              <div style="background:#fff;border:1px solid var(--border);padding:14px 18px;margin-bottom:16px;">
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--mgray);margin-bottom:6px;"><span>This week</span><span id="ctPct">0 of 10 hours</span></div>
+                <div style="height:6px;background:var(--border);"><div id="ctBar" style="height:100%;background:var(--gold);transition:width .4s;width:0%;"></div></div>
+              </div>
+              <div style="background:var(--gold-light);border-top:3px solid var(--gold);padding:16px 20px;">
+                <div style="font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--navy);margin-bottom:10px;">The RAT Method</div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+                  <div style="background:#fff;padding:12px;border:1px solid rgba(201,168,76,.3);"><div style="font-family:'Inter',sans-serif;font-size:22px;font-weight:700;color:var(--gold);margin-bottom:4px;">R</div><div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--navy);margin-bottom:4px;">Reason</div><div style="font-size:12px;color:var(--mgray);line-height:1.5;">Why do you need their support right now?</div></div>
+                  <div style="background:#fff;padding:12px;border:1px solid rgba(201,168,76,.3);"><div style="font-family:'Inter',sans-serif;font-size:22px;font-weight:700;color:var(--gold);margin-bottom:4px;">A</div><div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--navy);margin-bottom:4px;">Amount</div><div style="font-size:12px;color:var(--mgray);line-height:1.5;">Make a specific ask — a number and a deadline.</div></div>
+                  <div style="background:#fff;padding:12px;border:1px solid rgba(201,168,76,.3);"><div style="font-family:'Inter',sans-serif;font-size:22px;font-weight:700;color:var(--gold);margin-bottom:4px;">T</div><div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--navy);margin-bottom:4px;">Time</div><div style="font-size:12px;color:var(--mgray);line-height:1.5;">Then stop talking. Make the ask and wait.</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-glossary" style="display:none;">
+        <div class="topbar"><div class="topbar-title">Political Glossary</div><div class="topbar-right"><button class="btn-s" onclick="showView('dashboard')">← Dashboard</button></div></div>
+        <div class="comp-banner"><div class="cb-eyebrow">Component 05</div><div class="cb-title">Political Glossary for First-Time Candidates</div><div class="cb-sub">43 terms across five categories. Search, filter by category, or bookmark terms to save for reference.</div></div>
+        <div style="padding:24px 32px;">
+          <div style="background:#fff;border:1px solid var(--border);padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+            <div style="flex:1;position:relative;">
+              <input type="text" id="glossSearchInp" placeholder="Search terms and definitions..." oninput="glossSearch()"
+                style="width:100%;padding:9px 12px 9px 36px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:14px;color:var(--dark);background:var(--off);outline:none;transition:all .15s;">
+              <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:14px;height:14px;fill:var(--mgray);pointer-events:none;" viewBox="0 0 16 16"><path d="M11.4 10l3.3 3.3-1.4 1.4L10 11.4A6 6 0 111.4 1.4 6 6 0 0111.4 10zm-5.4 1a4 4 0 100-8 4 4 0 000 8z"/></svg>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button onclick="glossFilter('all',this)" style="padding:6px 12px;font-size:11px;font-weight:500;background:var(--navy);color:#fff;border:1px solid var(--navy);cursor:pointer;font-family:'Inter',sans-serif;" class="gfbtn">All</button>
+              <button onclick="glossFilter('finance',this)" style="padding:6px 12px;font-size:11px;font-weight:500;background:#fff;color:var(--mgray);border:1px solid var(--border);cursor:pointer;font-family:'Inter',sans-serif;" class="gfbtn">Finance</button>
+              <button onclick="glossFilter('electoral',this)" style="padding:6px 12px;font-size:11px;font-weight:500;background:#fff;color:var(--mgray);border:1px solid var(--border);cursor:pointer;font-family:'Inter',sans-serif;" class="gfbtn">Electoral</button>
+              <button onclick="glossFilter('strategy',this)" style="padding:6px 12px;font-size:11px;font-weight:500;background:#fff;color:var(--mgray);border:1px solid var(--border);cursor:pointer;font-family:'Inter',sans-serif;" class="gfbtn">Strategy</button>
+              <button onclick="glossFilter('party',this)" style="padding:6px 12px;font-size:11px;font-weight:500;background:#fff;color:var(--mgray);border:1px solid var(--border);cursor:pointer;font-family:'Inter',sans-serif;" class="gfbtn">Party</button>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid var(--border);" id="glossWrap"></div>
+        </div>
+      </div>
+
+      <div id="view-pressrelease" style="display:none;">
+        <div class="topbar">
+          <div class="topbar-title">Press Release Builder</div>
+          <div class="topbar-right">
+            <button class="btn-s">Download Word ↓</button>
+            <button class="btn-s" onclick="showView('dashboard')">← Dashboard</button>
+          </div>
+        </div>
+        <div class="comp-banner">
+          <div class="cb-eyebrow">Component 06 — Pre-filled from your assessment</div>
+          <div class="cb-title">Announcement Press Release</div>
+          <div class="cb-sub" id="prBannerSub">Your release is already ~70% complete. Click any section to edit directly.</div>
+        </div>
+
+        <div style="padding:24px 32px;">
+
+          <div style="background:#2E7D32;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+            <svg style="width:16px;height:16px;fill:#fff;flex-shrink:0;" viewBox="0 0 16 16"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm-.75 4h1.5v5h-1.5V5zm0 6h1.5v1.5h-1.5V11z"/></svg>
+            <div style="font-size:12px;color:#fff;line-height:1.5;"><strong style="font-weight:500;">Pre-filled from your assessment.</strong> Your name, race, and why are already here. Red fields need your input.</div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 300px;gap:20px;">
+
+            <!-- DOCUMENT -->
+            <div style="background:#fff;border:1px solid var(--border);padding:40px 44px;">
+
+              <div style="border-bottom:3px solid var(--navy);padding-bottom:16px;margin-bottom:20px;">
+                <div contenteditable="true" id="prOrg" style="font-size:20px;font-weight:500;color:var(--navy);margin-bottom:3px;outline:none;min-height:28px;"></div>
+                <div contenteditable="true" id="prContact" style="font-size:12px;color:var(--mgray);outline:none;">campaign@[yourwebsite].com &nbsp;&middot;&nbsp; [phone] &nbsp;&middot;&nbsp; [website]</div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;">
+                <div>
+                  <div style="font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--mgray);margin-bottom:3px;">For Immediate Release</div>
+                  <div contenteditable="true" id="prDate" style="font-size:13px;color:var(--red);outline:none;border-bottom:1px dashed var(--red);">[Release date]</div>
+                </div>
+                <div>
+                  <div style="font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--mgray);margin-bottom:3px;">Media Contact</div>
+                  <div contenteditable="true" id="prMediaContact" style="font-size:13px;color:var(--red);outline:none;border-bottom:1px dashed var(--red);">[Name &middot; Phone &middot; Email]</div>
+                </div>
+              </div>
+
+              <div style="margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border);">
+                <div contenteditable="true" id="prHed" style="font-size:18px;font-weight:500;color:var(--dark);line-height:1.35;margin-bottom:8px;outline:none;min-height:26px;"></div>
+                <div contenteditable="true" id="prSubhed" style="font-size:14px;color:var(--mgray);font-style:italic;outline:none;min-height:20px;"></div>
+              </div>
+
+              <div style="font-size:13px;line-height:1.75;color:var(--dark);">
+                <div contenteditable="true" id="prDateline" style="margin-bottom:14px;outline:none;min-height:20px;"></div>
+
+                <div style="margin:16px 0;padding:12px 16px;border-left:4px solid var(--navy);background:var(--off);">
+                  <div contenteditable="true" id="prQ1" style="font-style:italic;font-size:14px;line-height:1.65;color:var(--dark);outline:none;min-height:22px;"></div>
+                  <div id="prQ1Attr" style="font-style:normal;font-size:12px;color:var(--mgray);margin-top:6px;"></div>
+                </div>
+
+                <div contenteditable="true" id="prBody1" style="margin-bottom:14px;outline:none;min-height:60px;"></div>
+
+                <div style="margin:16px 0;padding:12px 16px;border-left:4px solid var(--navy);background:var(--off);">
+                  <div contenteditable="true" id="prQ2" style="font-style:italic;font-size:14px;line-height:1.65;color:var(--dark);outline:none;">"The families of our community deserve a Council member who plans for the community we are building — not just the one that existed twenty years ago. I am running to be that voice."</div>
+                  <div id="prQ2Attr" style="font-style:normal;font-size:12px;color:var(--mgray);margin-top:6px;"></div>
+                </div>
+
+                <div contenteditable="true" id="prKickoff" style="margin-bottom:14px;outline:none;color:var(--red);border-bottom:1px dashed var(--red);">[Add your kickoff event details — day, date, venue, address, time]</div>
+
+                <div style="text-align:center;font-weight:500;font-size:16px;margin:24px 0;letter-spacing:.1em;color:var(--navy);">###</div>
+
+                <div style="border-top:1px solid var(--border);padding-top:16px;">
+                  <div style="font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--mgray);margin-bottom:8px;">About</div>
+                  <div contenteditable="true" id="prBoilerplate" style="font-size:12px;color:var(--mgray);line-height:1.65;outline:none;min-height:40px;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SIDEBAR -->
+            <div>
+              <div style="background:#fff;border:1px solid var(--border);padding:20px;margin-bottom:12px;">
+                <div style="font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--navy);margin-bottom:12px;">Completeness</div>
+                <div style="font-size:28px;font-weight:500;color:var(--navy);">78%</div>
+                <div style="font-size:11px;color:var(--mgray);margin-bottom:10px;">3 fields need your input</div>
+                <div style="height:5px;background:var(--border);"><div style="height:100%;background:var(--gold);width:78%;"></div></div>
+              </div>
+
+              <div style="background:#fff;border:1px solid var(--border);padding:20px;margin-bottom:12px;">
+                <div style="font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--navy);margin-bottom:12px;">Before you send</div>
+                <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--dark);">
+                  <div style="display:flex;gap:8px;align-items:flex-start;"><svg style="width:14px;height:14px;fill:#2E7D32;flex-shrink:0;margin-top:1px;" viewBox="0 0 16 16"><path d="M2 8l4 4 8-8-1.4-1.4L6 9.2 3.4 6.6z"/></svg>Headline names you and frames the race</div>
+                  <div style="display:flex;gap:8px;align-items:flex-start;"><svg style="width:14px;height:14px;fill:#2E7D32;flex-shrink:0;margin-top:1px;" viewBox="0 0 16 16"><path d="M2 8l4 4 8-8-1.4-1.4L6 9.2 3.4 6.6z"/></svg>First quote is personal and specific</div>
+                  <div style="display:flex;gap:8px;align-items:flex-start;"><svg style="width:14px;height:14px;fill:#2E7D32;flex-shrink:0;margin-top:1px;" viewBox="0 0 16 16"><path d="M2 8l4 4 8-8-1.4-1.4L6 9.2 3.4 6.6z"/></svg>Local data point included</div>
+                  <div style="display:flex;gap:8px;align-items:flex-start;color:var(--red);"><svg style="width:14px;height:14px;fill:var(--red);flex-shrink:0;margin-top:1px;" viewBox="0 0 16 16"><path d="M8 1L1 14h14L8 1zm0 3l5.5 9h-11L8 4zm-.75 3v3h1.5V7h-1.5zm0 4v1.5h1.5V11h-1.5z"/></svg>Kickoff event details</div>
+                  <div style="display:flex;gap:8px;align-items:flex-start;color:var(--red);"><svg style="width:14px;height:14px;fill:var(--red);flex-shrink:0;margin-top:1px;" viewBox="0 0 16 16"><path d="M8 1L1 14h14L8 1zm0 3l5.5 9h-11L8 4zm-.75 3v3h1.5V7h-1.5zm0 4v1.5h1.5V11h-1.5z"/></svg>Media contact complete</div>
+                </div>
+                <div style="margin-top:14px;padding:12px;background:var(--gold-light);border-top:2px solid var(--gold);">
+                  <div style="font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--navy);margin-bottom:4px;">Pro tip</div>
+                  <div style="font-size:11px;color:var(--dark);line-height:1.55;">Would a busy local reporter find a story in 30 seconds? If not, sharpen the headline until they would.</div>
+                </div>
+              </div>
+
+              <button style="width:100%;padding:12px;background:var(--navy);color:#fff;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;margin-bottom:8px;">Download as Word</button>
+              <button style="width:100%;padding:12px;background:var(--off);color:var(--navy);border:1px solid var(--border);cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;">Download as PDF</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div id="view-comms" style="display:none;">
+        <div class="topbar"><div class="topbar-title">Communications &amp; Launch Strategy</div><div class="topbar-right"><button class="btn-s" onclick="showView('dashboard')">← Dashboard</button></div></div>
+        <div class="comp-banner"><div class="cb-eyebrow">Component 07</div><div class="cb-title">Communications &amp; Launch Strategy</div><div class="cb-sub">The most important rule: don't start posting like a politician. Check off your pre-launch requirements below.</div></div>
+        <div style="padding:24px 32px;">
+          <div style="background:#fff;border:1px solid var(--border);margin-bottom:20px;">
+            <div style="display:flex;border-bottom:1px solid var(--border);">
+              <div style="padding:12px 20px;font-size:13px;font-weight:500;color:var(--navy);border-bottom:2px solid var(--navy);cursor:pointer;" class="ctab act" onclick="commsTab(this,'presence')">Digital Presence</div>
+              <div style="padding:12px 20px;font-size:13px;color:var(--mgray);border-bottom:2px solid transparent;cursor:pointer;" class="ctab" onclick="commsTab(this,'day')">Announcement Day</div>
+              <div style="padding:12px 20px;font-size:13px;color:var(--mgray);border-bottom:2px solid transparent;cursor:pointer;" class="ctab" onclick="commsTab(this,'calendar')">Content Calendar</div>
+            </div>
+            <div id="comms-presence" style="padding:24px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" id="presenceGrid"></div>
+              <div style="background:var(--gold-light);border-top:3px solid var(--gold);padding:16px 20px;margin-top:16px;">
+                <div style="font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--navy);margin-bottom:6px;">One critical check</div>
+                <div style="font-size:13px;color:var(--dark);line-height:1.65;">If you're keeping your day job during the campaign — review your employer's social media policy before you start posting as a candidate. A five-minute check now prevents a serious problem later.</div>
+              </div>
+            </div>
+            <div id="comms-day" style="padding:24px;display:none;">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;" id="annDayGrid"></div>
+            </div>
+            <div id="comms-calendar" style="padding:24px;display:none;">
+              <div style="font-size:13px;color:var(--mgray);margin-bottom:16px;line-height:1.6;">Consistency beats brilliance. Three posts a week, every week, for six months beats brilliant bursts followed by silence.</div>
+              <table style="width:100%;border-collapse:collapse;">
+                <thead><tr style="background:var(--navy);">
+                  <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.5);">Day</th>
+                  <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.5);">Type</th>
+                  <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.5);">Example</th>
+                  <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.5);">Principle</th>
+                </tr></thead>
+                <tbody>
+                  <tr style="border-bottom:1px solid var(--border);"><td style="padding:12px 14px;font-weight:500;color:var(--navy);">Monday</td><td style="padding:12px 14px;color:var(--red);font-weight:500;">Community</td><td style="padding:12px 14px;font-size:12px;color:var(--mgray);">Something you noticed or attended in the district</td><td style="padding:12px 14px;font-size:12px;color:var(--dark);">Show, don't tell. A photo beats a statement.</td></tr>
+                  <tr style="border-bottom:1px solid var(--border);background:var(--off);"><td style="padding:12px 14px;font-weight:500;color:var(--navy);">Wednesday</td><td style="padding:12px 14px;color:var(--red);font-weight:500;">Issue</td><td style="padding:12px 14px;font-size:12px;color:var(--mgray);">Your take on something relevant to your race</td><td style="padding:12px 14px;font-size:12px;color:var(--dark);">Stay in your lane. Local issues, local voice.</td></tr>
+                  <tr><td style="padding:12px 14px;font-weight:500;color:var(--navy);">Friday</td><td style="padding:12px 14px;color:var(--red);font-weight:500;">Personal</td><td style="padding:12px 14px;font-size:12px;color:var(--mgray);">A real moment from the campaign — unpolished</td><td style="padding:12px 14px;font-size:12px;color:var(--dark);">Video outperforms everything. Phone is fine.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- D3 for map -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+
+<script>
+// ═══════════════════════════════════════════
+// POPULATE DASHBOARD FROM ASSESSMENT DATA
+// ═══════════════════════════════════════════
+function populateAllWidgets() {
+  var nameVal   = (document.getElementById("candidateName") || {value:""}).value.trim() || "Jane Mitchell";
+  var firstName = nameVal.split(" ")[0];
+  var race      = (document.getElementById("a4") || {value:""}).value.trim() || "Texas \u2014 City Council \u2014 Austin";
+  var why       = (document.getElementById("a1") || {value:""}).value.trim();
+  var problem   = (document.getElementById("a2") || {value:""}).value.trim();
+  var advisor   = (document.getElementById("a3") || {value:""}).value.trim();
+  var seat      = (document.getElementById("a5") || {value:""}).value.trim();
+  var opponent  = (document.getElementById("a6") || {value:""}).value.trim();
+  var timing    = (document.getElementById("a7") || {value:""}).value.trim();
+  var time      = (document.getElementById("a8") || {value:""}).value.trim();
+  var network   = (document.getElementById("a9") || {value:""}).value.trim();
+  var family    = (document.getElementById("a10") || {value:""}).value.trim();
+
+  populatePillars(nameVal, firstName, race, why, problem, advisor, seat, opponent, timing, time, network, family);
+  populateTimeline();
+  populateFilingChecklist(race);
+  populatePressRelease(nameVal, firstName, race, why, problem);
+  populatePresenceChecklist();
+  populateAnnouncementDay();
+  populateGlossary();
+  initBudget();
+}
+
+// ── PILLARS ──────────────────────────────────────────────────────────────────
+function populatePillars(nameVal, firstName, race, why, problem, advisor, seat, opponent, timing, time, network, family) {
+  var wrap = document.getElementById("pillarAnswersWrap");
+  if (!wrap) return;
+  var pillars = [
+    { letter:"P", pnum:"Pillar 1", title:"Purpose \u2014 Your Why", qs:[
+      { q:"In one sentence, why are you running?", a:why },
+      { q:"What problem are you at your first town hall to solve?", a:problem },
+      { q:"What did your trusted advisor say?", a:advisor }
+    ]},
+    { letter:"O", pnum:"Pillar 2", title:"Opening \u2014 Your Opportunity", qs:[
+      { q:"What seat are you targeting and why?", a:race },
+      { q:"What type of race is this?", a:seat },
+      { q:"Who else is likely to run?", a:opponent },
+      { q:"Why is now the right time?", a:timing }
+    ]},
+    { letter:"R", pnum:"Pillar 3", title:"Resources \u2014 Your Means", qs:[
+      { q:"How many hours per week can you commit?", a:time },
+      { q:"How many people would take your call? How many would donate?", a:network },
+      { q:"Have you had the honest family conversation?", a:family }
+    ]}
+  ];
+  var html = "";
+  for (var pi = 0; pi < pillars.length; pi++) {
+    var p = pillars[pi];
+    var qs = "";
+    for (var qi = 0; qi < p.qs.length; qi++) {
+      var q = p.qs[qi];
+      var aHtml = q.a ? q.a : "<span style='color:var(--mgray);font-style:normal;'>Not answered</span>";
+      qs += "<div class='pil-q'><div class='pil-q-txt'>" + q.q + "</div><div class='pil-a'>" + aHtml + "</div></div>";
+    }
+    html += "<div class='pil-card'><div class='pil-hdr'><div class='pil-num'>" + p.letter + "</div><div class='pil-hdr-txt'><div class='pil-name'>" + p.pnum + "</div><div class='pil-title'>" + p.title + "</div></div></div><div class='pil-body'>" + qs + "</div></div>";
+  }
+  wrap.innerHTML = html;
+  var banner = document.getElementById("pillarsBannerTitle");
+  if (banner) banner.textContent = firstName + "'s assessment results.";
+}
+
+// ── TIMELINE ─────────────────────────────────────────────────────────────────
+var TL_PHASES = [
+  { num:1, name:"Exploratory", desc:"The work you do before you decide.",
+    rta:"You can answer every Pillars question with clarity and your kitchen cabinet is behind you.",
+    items:["Complete the 3 Pillars self-assessment","Convene your kitchen cabinet","Research the specific seat: filing deadlines, district boundaries","Talk to people who have run before","Have the family conversation","Assess your financial baseline","Make the decision: in or out"] },
+  { num:2, name:"Formation", desc:"You've decided to run. Now build the infrastructure before you go public.",
+    rta:"Your legal and financial infrastructure is in place and your core message is sharp.",
+    items:["File your candidacy paperwork","Open a dedicated campaign bank account","Understand campaign finance reporting requirements","Recruit your core team","Secure your digital presence","Draft your core message and stump speech","Build your initial donor list","Set your fundraising baseline goal"] },
+  { num:3, name:"Launch", desc:"Going public and making your first impression count.",
+    rta:"You've hit your launch fundraising goal and voters are starting to know your name.",
+    items:["Announce your candidacy","Execute your first fundraising push","Pitch your story to local press","Begin voter contact","Activate your initial volunteer base","Post consistently on social media","Attend every public forum you can"] },
+  { num:4, name:"Build", desc:"The long middle \u2014 where most campaigns are won or lost.",
+    rta:"You're within 60 days of Election Day and your organization is humming.",
+    items:["Maintain a consistent fundraising cadence","Expand voter contact","Grow your volunteer base","Develop coalition relationships","Refine your message at the doors","Monitor your opponent","Track your metrics"] },
+  { num:5, name:"Closing", desc:"The final push \u2014 leave everything on the field.",
+    rta:"It's Election Eve and you've done everything you can.",
+    items:["Shift from persuasion to mobilization","Launch paid media if budget allows","Prepare for debates","Intensify voter contact","Send a final fundraising push","Activate your volunteer army for GOTV","Finalize Election Day operations"] },
+  { num:6, name:"Election Day", desc:"Execute, then reflect.",
+    rta:"Most great elected officials lost before they won. How you handle this day defines your next chapter.",
+    items:["Execute your GOTV plan","Have presence at polling locations where permitted","Monitor turnout throughout the day","Prepare both a victory and a concession statement","Celebrate your team regardless of outcome","Debrief, document, stay connected"] }
+];
+
+var tlActive = 1;
+var tlChecked = {};
+for (var i = 0; i < TL_PHASES[0].items.length; i++) { tlChecked["0-"+i] = true; }
+
+function populateTimeline() { renderTlStrip(); renderTlPhase(); }
+
+function renderTlStrip() {
+  var strip = document.getElementById("tlStrip");
+  if (!strip) return;
+  var html = "";
+  for (var i = 0; i < TL_PHASES.length; i++) {
+    var p = TL_PHASES[i];
+    var isCur = i === tlActive;
+    var isDone = i < tlActive;
+    var dot = "background:" + (isCur ? "#C9A84C" : isDone ? "#2E7D32" : "#EEF0F4");
+    html += "<div class='tl-phase-tab" + (isCur?" act":"") + "' onclick='tlSetPhase(" + i + ")'>";
+    html += "<div class='tl-tab-num'>Phase " + p.num + "</div>";
+    html += "<div class='tl-tab-name'>" + p.name + "</div>";
+    html += "<div style='width:8px;height:8px;border-radius:50%;margin:5px auto 0;" + dot + ";'></div></div>";
+  }
+  strip.innerHTML = html;
+}
+
+function renderTlPhase() {
+  var p = TL_PHASES[tlActive];
+  var done = 0;
+  for (var i = 0; i < p.items.length; i++) { if (tlChecked[tlActive+"-"+i]) done++; }
+  var pct = Math.round((done/p.items.length)*100);
+
+  var dv = document.getElementById("tlDoneVal"); if (dv) dv.textContent = done;
+  var ds = document.getElementById("tlDoneSub"); if (ds) ds.textContent = "of " + p.items.length + " this phase";
+  var pv = document.getElementById("tlPhaseVal"); if (pv) pv.textContent = p.name;
+
+  var hdr = document.getElementById("tlPhaseHeader");
+  if (hdr) {
+    hdr.innerHTML = "<div style='position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold);'></div>" +
+      "<div style='font-size:11px;color:var(--gold);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;'>Phase " + p.num + " of 6</div>" +
+      "<div style='font-family:'Inter',sans-serif;font-size:22px;color:#fff;font-weight:700;margin-bottom:6px;'>" + p.name + "</div>" +
+      "<div style='font-size:13px;color:rgba(255,255,255,.55);margin-bottom:14px;'>" + p.desc + "</div>" +
+      "<div style='display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.4);margin-bottom:5px;'><span>Progress</span><span>" + done + " of " + p.items.length + "</span></div>" +
+      "<div style='height:4px;background:rgba(255,255,255,.12);'><div style='height:100%;background:var(--gold);width:" + pct + "%;transition:width .4s;'></div></div>";
+  }
+
+  var ms = document.getElementById("tlMilestones");
+  if (ms) {
+    var html = "";
+    for (var i = 0; i < p.items.length; i++) {
+      var chk = !!tlChecked[tlActive+"-"+i];
+      html += "<div class='tl-ms-card" + (chk?" done":"") + "' onclick='tlToggle(" + i + ")'>" +
+        "<div class='tl-ms-row'><div class='tl-ms-box'><svg viewBox='0 0 10 8'><path d='M1 4l3 3 5-6' stroke='#fff' stroke-width='1.5' fill='none'/></svg></div>" +
+        "<div class='tl-ms-txt'>" + p.items[i] + "</div></div></div>";
+    }
+    ms.innerHTML = html;
+  }
+
+  var rta = document.getElementById("tlRTA");
+  if (rta) {
+    var allDone = done === p.items.length;
+    var isLast  = tlActive === TL_PHASES.length - 1;
+    var btnStyle = allDone && !isLast
+      ? "display:inline-block;margin-top:14px;padding:11px 28px;background:var(--navy);color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;border:none;cursor:pointer;"
+      : "display:inline-block;margin-top:14px;padding:11px 28px;background:var(--border);color:var(--mgray);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;border:none;cursor:default;";
+    var btnText = isLast ? "Final phase — good luck." : allDone ? "Mark complete & advance →" : "Complete all milestones to advance";
+    rta.innerHTML = "<div style='font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--mgray);margin-bottom:6px;'>Ready to advance when</div>" +
+      "<div style='font-size:14px;color:var(--dark);line-height:1.6;margin-bottom:0;'>" + p.rta + "</div>" +
+      "<button style='" + btnStyle + "' onclick='tlAdvance()'>" + btnText + "</button>";
+  }
+}
+
+function tlSetPhase(i) { tlActive = i; renderTlStrip(); renderTlPhase(); }
+function tlToggle(i) {
+  var k = tlActive + "-" + i;
+  tlChecked[k] = !tlChecked[k];
+  renderTlPhase();
+}
+
+function tlAdvance() {
+  var p = TL_PHASES[tlActive];
+  var done = 0;
+  for (var i = 0; i < p.items.length; i++) { if (tlChecked[tlActive+"-"+i]) done++; }
+  if (done < p.items.length || tlActive >= TL_PHASES.length - 1) return;
+  tlActive++;
+  renderTlStrip();
+  renderTlPhase();
+  var notes = document.getElementById("tlNotes");
+  if (notes) notes.value = "";
+  var strip = document.getElementById("tlStrip");
+  if (strip) strip.scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+
+
+function toggleFilingItem(el) {
+  el.classList.toggle("fl-ck");
+  var done = el.classList.contains("fl-ck");
+  var b = el.querySelector(".fl-bx");
+  var s = el.querySelector(".fl-sv");
+  var t = el.querySelector(".fl-tx");
+  if (b) { b.style.background = done ? "var(--green)" : ""; b.style.borderColor = done ? "var(--green)" : "var(--border)"; }
+  if (s) s.style.display = done ? "block" : "none";
+  if (t) t.style.color = done ? "var(--mgray)" : "var(--dark)";
+}
+
+// ── FILING CHECKLIST ─────────────────────────────────────────────────────────
+var FILING_DEADLINES = [
+  {name:"Candidacy filing deadline", date:"TBD — confirm with City Clerk", status:"research", notes:"Your single most important early date"},
+  {name:"Campaign committee registration", date:"Before any fundraising", status:"upcoming", notes:"Ethics commission — do this first"},
+  {name:"Campaign bank account opened", date:"Before any fundraising", status:"upcoming", notes:"Never commingle personal and campaign funds"},
+  {name:"First campaign finance report", date:"~30 days post-filing", status:"upcoming", notes:"Confirm exact date with state agency"},
+  {name:"Pre-election finance report", date:"TBD", status:"research", notes:"Typically ~30 days before election"},
+  {name:"Early voting start date", date:"TBD", status:"research", notes:"Your GOTV begins here, not Election Day"},
+  {name:"Voter registration deadline", date:"TBD", status:"research", notes:"Know this to remind your supporters"},
+  {name:"Election Day", date:"May 2025 (est.)", status:"upcoming", notes:"Confirm with county election division"},
+  {name:"Post-election finance report", date:"TBD", status:"research", notes:"Required even if you lose"},
+];
+
+function toggleFilingItem(el) {
+  el.classList.toggle("fl-ck");
+  var done = el.classList.contains("fl-ck");
+  var b = el.querySelector(".fl-bx");
+  var s = el.querySelector(".fl-sv");
+  var t = el.querySelector(".fl-tx");
+  if (b) { b.style.background = done ? "var(--green)" : ""; b.style.borderColor = done ? "var(--green)" : "var(--border)"; }
+  if (s) s.style.display = done ? "block" : "none";
+  if (t) t.style.color = done ? "var(--mgray)" : "var(--dark)";
+}
+
+function populateFilingChecklist(race) {
+  var locTitle = document.getElementById("filingLocationTitle");
+  var locSub   = document.getElementById("filingLocationSub");
+  var eyebrow  = document.getElementById("filingEyebrow");
+  var raceStr  = race || "Texas — City Council — Austin";
+  if (locTitle) locTitle.textContent = raceStr;
+  if (eyebrow)  eyebrow.textContent  = "Component 03 — " + raceStr;
+  var parts = raceStr.split(" — ");
+  if (locSub) locSub.textContent = (parts[2] || "") + " · " + (parts[0] || "Your state") + " · " + (parts[1] || "Local race");
+
+  var wrap = document.getElementById("filingChecklist");
+  if (!wrap) return;
+
+  var questions = [
+    { num:"1", title:"Am I eligible?",
+      items:[
+        {text:"Confirmed residency requirement", done:true},
+        {text:"Confirmed age requirement (18+)", done:true},
+        {text:"Verified registered voter in the correct district", done:false},
+        {text:"Checked employer social media and campaign policies", done:false}
+      ],
+      where:"Secretary of State website · County election board" },
+    { num:"2", title:"How and when do I file?",
+      items:[
+        {text:"Confirmed exact filing deadline with election office — this is your most important early date, put it everywhere", done:false},
+        {text:"Filing location confirmed", done:false},
+        {text:"Downloaded and reviewed all required candidacy forms", done:false},
+        {text:"Confirmed filing fee amount and accepted payment method", done:false},
+        {text:"Researched petition-in-lieu option and signature requirements", done:false}
+      ],
+      where:"State or county election board website · Call to confirm" },
+    { num:"3", title:"What are my campaign finance obligations?",
+      items:[
+        {text:"Registered campaign committee with ethics commission — before raising a dollar", done:false},
+        {text:"Confirmed contribution limits for this specific race", done:false},
+        {text:"Identified first finance report due date", done:false},
+        {text:"Opened a dedicated campaign bank account", done:false}
+      ],
+      where:"State campaign finance agency · Ethics commission website" },
+    { num:"4", title:"What are the ballot and primary rules?",
+      items:[
+        {text:"Confirmed partisan vs. nonpartisan race type", done:true},
+        {text:"Confirmed primary structure or confirmed no primary for this race", done:true},
+        {text:"Researched name preference form requirements with election office", done:false}
+      ],
+      where:"State or county election board" },
+    { num:"5", title:"What is my relationship with the party?",
+      items:[
+        {text:"Confirmed any party filing requirements for this race", done:true},
+        {text:"Introduced myself to county party chair", done:false},
+        {text:"Researched voter file access options through party", done:false}
+      ],
+      where:"County party website · Call the party chair directly" }
+  ];
+
+  var html = "";
+  for (var qi = 0; qi < questions.length; qi++) {
+    var q = questions[qi];
+    var itemsHtml = "";
+    for (var ii = 0; ii < q.items.length; ii++) {
+      var item = q.items[ii];
+      var chkStyle = item.done ? "background:var(--green);border-color:var(--green);" : "";
+      var svgStyle = item.done ? "display:block;" : "display:none;";
+      var txtColor = item.done ? "color:var(--mgray);" : "color:var(--dark);";
+      var isLast = ii === q.items.length - 1;
+      itemsHtml +=
+        "<div class='" + (item.done ? "fl-ck " : "") + "' style='display:flex;align-items:flex-start;gap:12px;padding:11px 0;" +
+        (isLast ? "" : "border-bottom:1px solid var(--border);") +
+        "cursor:pointer;transition:background 150ms;' onclick='toggleFilingItem(this)'>" +
+          "<div class='fl-bx' style='width:17px;height:17px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:var(--transition);" + chkStyle + "'>" +
+            "<svg class='fl-sv' width='10' height='8' viewBox='0 0 10 8' style='" + svgStyle + "'><path d='M1 4l3 3 5-6' stroke='#fff' stroke-width='1.5' fill='none'/></svg>" +
+          "</div>" +
+          "<div class='fl-tx' style='font-size:13px;line-height:1.55;" + txtColor + "'>" + item.text + "</div>" +
+        "</div>";
+    }
+
+    var isLastQ = qi === questions.length - 1;
+    html +=
+      "<div style='padding:0 22px;'>" +
+        "<div style='display:flex;align-items:flex-start;gap:16px;padding:18px 0;border-bottom:1px solid var(--border);'>" +
+          "<div style='width:30px;height:30px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:700;border-radius:7px;margin-top:1px;'>" + q.num + "</div>" +
+          "<div style='font-size:15px;font-weight:600;color:var(--navy);padding-top:3px;letter-spacing:-.15px;'>" + q.title + "</div>" +
+        "</div>" +
+        "<div style='padding:4px 0;'>" + itemsHtml + "</div>" +
+        "<div style='padding:12px 0 20px;" + (isLastQ ? "" : "border-bottom:2px solid var(--border);") + "'>" +
+          "<div style='display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--gold-light);border-radius:var(--radius);'>" +
+            "<span style='font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7A5C00;white-space:nowrap;padding-top:1px;'>Where to look</span>" +
+            "<span style='font-size:12px;color:var(--dark);line-height:1.55;'>" + q.where + "</span>" +
+          "</div>" +
+        "</div>" +
+      "</div>";
+  }
+  wrap.innerHTML = html;
+}
+
+function renderFilingTracker() {
+  var tbody = document.getElementById("filingTrackerBody");
+  if (!tbody) return;
+  var styles = {
+    research:{bg:"#F3F4F6",color:"#6B7280",label:"Research needed"},
+    upcoming:{bg:"#EBF4FE",color:"#1A5FAB",label:"Upcoming"},
+    done:{bg:"var(--green-bg)",color:"var(--green)",label:"Done"},
+    urgent:{bg:"#FEF2F2",color:"#DC2626",label:"Urgent"}
+  };
+  tbody.innerHTML = FILING_DEADLINES.map(function(d) {
+    var st = styles[d.status] || styles.research;
+    return "<tr style='border-bottom:1px solid var(--border);'>" +
+      "<td style='padding:12px 18px;font-size:13px;font-weight:500;color:var(--navy);'>" + d.name + "</td>" +
+      "<td style='padding:12px 18px;font-size:13px;font-weight:500;color:var(--navy);'>" + d.date + "</td>" +
+      "<td style='padding:12px 18px;'><span style='display:inline-block;padding:3px 10px;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;background:" + st.bg + ";color:" + st.color + ";border-radius:4px;'>" + st.label + "</span></td>" +
+      "<td style='padding:12px 18px;font-size:12px;color:var(--mgray);'>" + d.notes + "</td>" +
+    "</tr>";
+  }).join("");
+}
+
+function filingTab(el, name) {
+  document.querySelectorAll(".filing-tab").forEach(function(t) {
+    t.style.fontWeight = "400";
+    t.style.color = "var(--mgray)";
+    t.style.borderBottomColor = "transparent";
+  });
+  el.style.fontWeight = "600";
+  el.style.color = "var(--navy)";
+  el.style.borderBottomColor = "var(--navy)";
+  ["questions","tracker","notes"].forEach(function(n) {
+    var p = document.getElementById("filing-" + n);
+    if (p) p.style.display = n === name ? "block" : "none";
+  });
+  if (name === "tracker") renderFilingTracker();
+}
+
+
+// ── PRESS RELEASE ─────────────────────────────────────────────────────────────
+function populatePressRelease(nameVal, firstName, race, why, problem) {
+  var parts = race.split(" \u2014 ");
+  var state    = parts[0] || "TX";
+  var raceType = parts[1] || "City Council";
+  var city     = parts[2] || "Austin";
+
+  function setEl(id, val, useHTML) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (useHTML) el.innerHTML = val; else el.textContent = val;
+  }
+
+  setEl("prOrg", nameVal + " for " + city + " " + raceType);
+  setEl("prHed", nameVal + " Announces Campaign for " + city + " " + raceType);
+  setEl("prSubhed", "With community challenges mounting, " + firstName + " says the " + raceType + " must act \u2014 and will.");
+  setEl("prDateline", city.toUpperCase() + ", " + state.toUpperCase() + " \u2014 " + nameVal + ", a longtime community member, today announced their candidacy for " + city + " " + raceType + ".");
+  setEl("prQ1", why || "I am running because our community deserves representation that actually shows up.");
+  setEl("prQ1Attr", "\u2014 " + nameVal, true);
+  setEl("prQ2Attr", "\u2014 " + nameVal, true);
+  setEl("prBody1", problem || "The community faces real challenges that demand bold leadership and a fresh perspective.");
+  setEl("prBoilerplate", nameVal + " is a longtime resident and community member who has been actively engaged in local issues and brings direct experience with the challenges facing " + city + " families.");
+}
+
+// ── DIGITAL PRESENCE ─────────────────────────────────────────────────────────
+function populatePresenceChecklist() {
+  var grid = document.getElementById("presenceGrid");
+  if (!grid) return;
+  var items = [
+    { name:"Campaign Website", priority:"Non-negotiable", color:"#FFEBEE", textColor:"#C62828",
+      desc:"Your home base. Must have your name, office, donation button, email sign-up, and press contact." },
+    { name:"Facebook", priority:"Non-negotiable", color:"#FFEBEE", textColor:"#C62828",
+      desc:"Dominant for local organizing and older voter engagement. Most important social platform at the local level." },
+    { name:"Instagram", priority:"Essential", color:"#E8F5E9", textColor:"#2E7D32",
+      desc:"Visual storytelling and younger voter reach. Secure your handle before launch." },
+    { name:"Campaign Email", priority:"Non-negotiable", color:"#FFEBEE", textColor:"#C62828",
+      desc:"yourname@yourcampaign.com not Gmail. Professional email signals this is real." },
+    { name:"Nextdoor", priority:"Underrated", color:"#E3F2FD", textColor:"#1565C0",
+      desc:"Hyper-local, highly trusted, and underused by most campaigns. Powerful for city council races." },
+    { name:"Campaign Phone", priority:"Essential", color:"#E8F5E9", textColor:"#2E7D32",
+      desc:"Keep your personal number personal. Google Voice is free and works fine." }
+  ];
+  var html = "";
+  for (var i = 0; i < items.length; i++) {
+    var item = items[i];
+    html += "<div class='pres-card' onclick='this.classList.toggle(\"done\");var c=this.querySelector(\".pres-chk\");c.style.background=this.classList.contains(\"done\")?\"#2E7D32\":\"\";c.style.borderColor=this.classList.contains(\"done\")?\"#2E7D32\":\"var(--border)\";'>" +
+      "<div style='display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;'>" +
+      "<div style='font-size:14px;font-weight:500;color:var(--navy);'>" + item.name + "</div>" +
+      "<span style='font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;background:" + item.color + ";color:" + item.textColor + ";'>" + item.priority + "</span></div>" +
+      "<div style='font-size:12px;color:var(--mgray);line-height:1.5;margin-bottom:12px;'>" + item.desc + "</div>" +
+      "<div style='display:flex;align-items:center;gap:8px;'><div class='pres-chk' style='width:16px;height:16px;border:2px solid var(--border);transition:all .15s;'></div>" +
+      "<div style='font-size:12px;color:var(--mgray);'>Mark as complete</div></div></div>";
+  }
+  grid.innerHTML = html;
+}
+
+// ── ANNOUNCEMENT DAY ─────────────────────────────────────────────────────────
+function populateAnnouncementDay() {
+  var grid = document.getElementById("annDayGrid");
+  if (!grid) return;
+  var cols = [
+    { time:"Morning", name:"Launch", tasks:["Publish press release to your media list","Post launch video simultaneously across all channels","Send first campaign email to your full list","Personal calls to kitchen cabinet \u2014 ask them to share now"] },
+    { time:"Midday",   name:"Amplify", tasks:["Post a behind-the-scenes moment from launch day","Respond to every comment and message personally","Monitor for press pickup \u2014 respond within the hour"] },
+    { time:"Evening",  name:"Momentum", tasks:["Post an end-of-day update \u2014 thank supporters genuinely","First fundraising check-in \u2014 show the real numbers","Log call time \u2014 who did you call? What came in?"] }
+  ];
+  var html = "";
+  for (var ci = 0; ci < cols.length; ci++) {
+    var col = cols[ci];
+    var tasks = "";
+    for (var ti = 0; ti < col.tasks.length; ti++) {
+      tasks += "<div class='day-task-row' onclick='this.classList.toggle(\"done\")'>" +
+        "<div class='day-chkbox'><svg viewBox='0 0 10 8'><path d='M1 4l3 3 5-6' stroke='#fff' stroke-width='1.5' fill='none'/></svg></div>" +
+        "<div class='day-task-txt'>" + col.tasks[ti] + "</div></div>";
+    }
+    html += "<div style='border:1px solid var(--border);border-right:none;'>" +
+      "<div class='day-col-hdr'><div class='day-col-time'>" + col.time + "</div><div class='day-col-nm'>" + col.name + "</div></div>" +
+      "<div>" + tasks + "</div></div>";
+  }
+  html += "<div style='border:1px solid var(--border);'></div>";
+  grid.innerHTML = html;
+}
+
+// ── GLOSSARY ─────────────────────────────────────────────────────────────────
+var GLOSS_TERMS = [
+  {term:"Burn Rate",cat:"finance",def:"How quickly your campaign is spending money relative to what it's raising. A high burn rate early is a serious red flag."},
+  {term:"Call Time",cat:"finance",def:"The scheduled time a candidate sets aside to personally call potential donors and ask for money. The single most important fundraising activity."},
+  {term:"Canvassing",cat:"electoral",def:"Going door to door in a district to talk directly with voters. One of the most effective voter contact methods at the local level."},
+  {term:"Closed Primary",cat:"electoral",def:"A primary in which only voters registered with a specific party can vote. Fundamentally changes your early voter contact strategy."},
+  {term:"County Party Chair",cat:"party",def:"The elected leader of your county party organization. Often your first and most important party relationship. Call them early."},
+  {term:"Dark Money",cat:"finance",def:"Political spending by nonprofit organizations not required to disclose their donors. Often flows through issue advocacy rather than direct candidate support."},
+  {term:"Earned Media",cat:"media",def:"Press coverage you generate through newsworthy actions. At the local level, often more valuable than anything you can buy."},
+  {term:"Endorsement",cat:"strategy",def:"A public declaration of support from an individual, organization, or publication. Party, union, and newspaper endorsements can carry significant weight."},
+  {term:"FEC",cat:"finance",def:"Federal Election Commission. The independent agency enforcing campaign finance law for federal races. State races have equivalent agencies."},
+  {term:"GOTV",cat:"electoral",def:"Get Out The Vote. The final push before Election Day to mobilize your identified supporters to actually vote. Often the difference in a close race."},
+  {term:"Hard Money",cat:"finance",def:"Contributions made directly to a candidate campaign committee and subject to legal limits."},
+  {term:"In-Kind Contribution",cat:"finance",def:"A non-cash donation such as goods, services, or professional work above a certain value. Must be reported just like a cash contribution."},
+  {term:"Kitchen Cabinet",cat:"strategy",def:"Your informal inner circle of trusted advisors. The 3 to 5 people who will tell you the truth when everyone else won't."},
+  {term:"News Cycle",cat:"media",def:"The rhythm of news coverage. Experienced campaigns try to drive the news cycle rather than react to it."},
+  {term:"Off-Cycle Election",cat:"electoral",def:"An election held outside the standard November cycle. Turnout is dramatically lower, which changes everything about strategy."},
+  {term:"Open Primary",cat:"electoral",def:"A primary election in which any registered voter can participate regardless of party affiliation."},
+  {term:"Opposition Research",cat:"strategy",def:"The process of investigating your opponent's record, statements, votes, and background for vulnerabilities."},
+  {term:"PAC",cat:"finance",def:"Political Action Committee. An organization that raises and spends money to elect or defeat candidates. Subject to contribution limits."},
+  {term:"Paid Media",cat:"media",def:"Advertising you pay for such as direct mail, digital ads, radio, and yard signs. Often less effective per dollar than direct voter contact at the local level."},
+  {term:"Phone Banking",cat:"electoral",def:"Organized volunteer calling of voters to identify supporters, persuade undecideds, or turn out known supporters on Election Day."},
+  {term:"Precinct",cat:"electoral",def:"The smallest geographic unit of electoral administration. Understanding precinct-level voting history in your district is essential."},
+  {term:"Press Release",cat:"media",def:"A written statement distributed to journalists to announce something newsworthy. Your announcement release is often the first thing a journalist sees about you."},
+  {term:"Stump Speech",cat:"strategy",def:"Your standard campaign speech. The core message you deliver at every event, refined over time until it is second nature."},
+  {term:"Super PAC",cat:"finance",def:"A PAC that can raise unlimited money from corporations and individuals but cannot directly coordinate with a candidate campaign. Result of Citizens United in 2010."},
+  {term:"Turnout",cat:"electoral",def:"The percentage of eligible voters who actually vote. Understanding turnout patterns in your district is one of the most important pre-filing tasks."},
+  {term:"VAN",cat:"electoral",def:"Voter Activation Network. The most widely used voter file and organizing platform in American politics. Access is typically available through your state party."},
+  {term:"Voter File",cat:"electoral",def:"A database of registered voters including contact information, voting history, and sometimes demographic data. One of the most valuable campaign assets."}
+];
+
+var glossCurrentFilter = "all";
+
+function populateGlossary() { renderGlossary(); }
+
+function renderGlossary() {
+  var wrap = document.getElementById("glossWrap");
+  if (!wrap) return;
+  var inp = document.getElementById("glossSearchInp");
+  var q = inp ? inp.value.trim().toLowerCase() : "";
+  var filtered = [];
+  for (var i = 0; i < GLOSS_TERMS.length; i++) {
+    var t = GLOSS_TERMS[i];
+    if (glossCurrentFilter !== "all" && t.cat !== glossCurrentFilter) continue;
+    if (q && t.term.toLowerCase().indexOf(q) < 0 && t.def.toLowerCase().indexOf(q) < 0) continue;
+    filtered.push(t);
+  }
+  if (filtered.length === 0) {
+    wrap.innerHTML = "<div style='padding:40px;text-align:center;font-size:14px;color:var(--mgray);'>No terms found.</div>";
+    return;
+  }
+  var catLabels = {finance:"Campaign Finance",electoral:"Electoral",strategy:"Strategy",party:"Party",media:"Media"};
+  var html = "";
+  for (var i = 0; i < filtered.length; i++) {
+    var t = filtered[i];
+    html += "<div class='gl-entry'><div class='gl-term'>" + t.term + "</div>" +
+      "<span class='gl-cat cat-" + t.cat + "'>" + (catLabels[t.cat] || t.cat) + "</span>" +
+      "<div class='gl-def'>" + t.def + "</div></div>";
+  }
+  wrap.innerHTML = html;
+}
+
+function glossSearch() { renderGlossary(); }
+
+function glossFilter(cat, btn) {
+  glossCurrentFilter = cat;
+  var btns = document.querySelectorAll(".gfbtn");
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].style.background = "#fff";
+    btns[i].style.color = "var(--mgray)";
+    btns[i].style.borderColor = "var(--border)";
+  }
+  btn.style.background = "var(--navy)";
+  btn.style.color = "#fff";
+  btn.style.borderColor = "var(--navy)";
+  renderGlossary();
+}
+
+// ── BUDGET ────────────────────────────────────────────────────────────────────
+var BGT_TIERS = [
+  { num:"Tier 1", name:"Core \u2014 Non-Negotiables",
+    items:[{n:"Filing fee",r:"$50\u2013$500",b:200,a:0},{n:"Campaign bank account",r:"$0\u2013$50",b:0,a:0},{n:"PO Box",r:"$100\u2013$200/yr",b:150,a:0},{n:"Basic legal / setup fees",r:"$200\u2013$500",b:300,a:0}]},
+  { num:"Tier 2", name:"Infrastructure \u2014 Technology",
+    items:[{n:"Website",r:"$500\u2013$1,500",b:800,a:0},{n:"Email platform",r:"$20\u2013$100/mo",b:240,a:0},{n:"Donor management / CRM",r:"$50\u2013$200/mo",b:600,a:0},{n:"Voter file access (VAN)",r:"$500\u2013$2,000",b:800,a:0},{n:"Text messaging",r:"$200\u2013$500",b:300,a:0}]},
+  { num:"Tier 3", name:"Voter Contact & Advertising",
+    items:[{n:"Palm cards / literature",r:"$500\u2013$1,500",b:800,a:0},{n:"Yard signs",r:"$500\u2013$2,000",b:1000,a:0},{n:"Direct mail",r:"$2,000\u2013$8,000",b:3000,a:0},{n:"Digital advertising",r:"$1,000\u2013$5,000",b:2000,a:0},{n:"Event costs",r:"$500\u2013$2,000",b:1000,a:0}]},
+  { num:"Tier 4", name:"Consultants \u2014 A La Carte",
+    items:[{n:"Mail + Digital consultant",r:"$3,000\u2013$15,000",b:0,a:0},{n:"Compliance consultant",r:"$1,500\u2013$5,000",b:2000,a:0},{n:"Finance consultant",r:"$2,000\u2013$10,000",b:0,a:0}]},
+  { num:"Tier 5", name:"Contingency Reserve",
+    items:[{n:"Reserve fund (10\u201315%)",r:"10\u201315%",b:1500,a:0}]}
+];
+
+function initBudget() { renderBgtTiers(); bgtUpdateTotals(); }
+
+function renderBgtTiers() {
+  var wrap = document.getElementById("bgt-tiers");
+  if (!wrap) return;
+  var html = "";
+  for (var ti = 0; ti < BGT_TIERS.length; ti++) {
+    var tier = BGT_TIERS[ti];
+    var tot = 0;
+    for (var ii = 0; ii < tier.items.length; ii++) tot += tier.items[ii].b;
+    var rows = "";
+    for (var ii = 0; ii < tier.items.length; ii++) {
+      var item = tier.items[ii];
+      rows += "<tr style='border-bottom:1px solid var(--border);'>" +
+        "<td style='padding:10px 14px;font-size:13px;color:var(--dark);'>" + item.n + "</td>" +
+        "<td style='padding:10px 14px;font-size:12px;color:var(--mgray);'>" + item.r + "</td>" +
+        "<td style='padding:10px 14px;'><input type='number' value='" + item.b + "' min='0' data-ti='" + ti + "' data-ii='" + ii + "' oninput='bgtOnBudget(this)' style='width:100%;border:1px solid var(--border);padding:6px 10px;font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:var(--dark);background:var(--off);outline:none;text-align:right;border-radius:6px;'></td>" +
+        "<td style='padding:10px 14px;'><input type='number' value='" + item.a + "' min='0' data-ti='" + ti + "' data-ii='" + ii + "' oninput='bgtOnActual(this)' style='width:100%;border:1px solid var(--border);padding:6px 10px;font-family:Inter,sans-serif;font-size:13px;color:var(--dark);background:var(--off);outline:none;text-align:right;border-radius:6px;'></td>" +
+        "<td style='padding:10px 14px;text-align:right;font-size:13px;font-weight:500;color:var(--mgray);' id='bt-var-" + ti + "-" + ii + "'>&#8212;</td></tr>";
+    }
+    html += "<div style='margin-bottom:20px;'>" +
+      "<div style='background:var(--navy);padding:10px 16px;display:flex;align-items:center;'>" +
+      "<span style='font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-right:10px;min-width:52px;'>" + tier.num + "</span>" +
+      "<span style='font-size:13px;font-weight:500;color:#fff;flex:1;'>" + tier.name + "</span>" +
+      "<span style='font-size:13px;font-weight:500;color:var(--gold);' id='bt-tot-" + ti + "'>$" + tot.toLocaleString() + "</span></div>" +
+      "<table style='width:100%;border-collapse:collapse;'>" +
+      "<thead><tr style='background:var(--off);'>" +
+      "<th style='text-align:left;font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--mgray);padding:8px 14px;border-bottom:1px solid var(--border);width:38%;'>Item</th>" +
+      "<th style='text-align:left;font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--mgray);padding:8px 14px;border-bottom:1px solid var(--border);width:18%;'>Est. range</th>" +
+      "<th style='text-align:right;font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--mgray);padding:8px 14px;border-bottom:1px solid var(--border);width:18%;'>Budget</th>" +
+      "<th style='text-align:right;font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--mgray);padding:8px 14px;border-bottom:1px solid var(--border);width:18%;'>Actual</th>" +
+      "<th style='text-align:right;font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--mgray);padding:8px 14px;border-bottom:1px solid var(--border);width:8%;'>Var.</th>" +
+      "</tr></thead><tbody>" + rows + "</tbody></table></div>";
+  }
+  wrap.innerHTML = html;
+}
+
+function bgtOnBudget(el) {
+  var ti = parseInt(el.getAttribute("data-ti")); var ii = parseInt(el.getAttribute("data-ii"));
+  BGT_TIERS[ti].items[ii].b = parseFloat(el.value)||0;
+  bgtUpdateVar(ti,ii); bgtUpdateTierTot(ti); bgtUpdateTotals();
+}
+function bgtOnActual(el) {
+  var ti = parseInt(el.getAttribute("data-ti")); var ii = parseInt(el.getAttribute("data-ii"));
+  BGT_TIERS[ti].items[ii].a = parseFloat(el.value)||0;
+  bgtUpdateVar(ti,ii); bgtUpdateTotals();
+}
+function bgtUpdateVar(ti, ii) {
+  var item = BGT_TIERS[ti].items[ii];
+  var el = document.getElementById("bt-var-"+ti+"-"+ii);
+  if (!el) return;
+  var diff = item.b - item.a;
+  if (item.a===0 && item.b===0) { el.textContent="\u2014"; el.style.color="var(--mgray)"; }
+  else if (diff>0) { el.textContent="$"+Math.round(diff).toLocaleString()+" left"; el.style.color="#2E7D32"; }
+  else if (diff<0) { el.textContent="$"+Math.round(Math.abs(diff)).toLocaleString()+" over"; el.style.color="var(--red)"; }
+  else { el.textContent="On budget"; el.style.color="var(--mgray)"; }
+}
+function bgtUpdateTierTot(ti) {
+  var tot = 0;
+  for (var ii=0; ii < BGT_TIERS[ti].items.length; ii++) tot += BGT_TIERS[ti].items[ii].b;
+  var el = document.getElementById("bt-tot-"+ti);
+  if (el) el.textContent = "$"+Math.round(tot).toLocaleString();
+}
+function bgtUpdateTotals() {
+  var totB=0, totA=0;
+  for (var ti=0; ti<BGT_TIERS.length; ti++) for (var ii=0; ii<BGT_TIERS[ti].items.length; ii++) {
+    totB += BGT_TIERS[ti].items[ii].b; totA += BGT_TIERS[ti].items[ii].a;
+  }
+  var raised = parseFloat((document.getElementById("fRaisedInp")||{value:0}).value)||0;
+  function fmt(n) { return "$"+Math.round(n).toLocaleString(); }
+  function setEl(id,v) { var el=document.getElementById(id); if(el) el.textContent=v; }
+  setEl("bgtTotal", fmt(totB)); setEl("bgtSpent", fmt(totA));
+  setEl("bgtRemain", fmt(totB-totA)); setEl("bgtRaised", fmt(raised));
+}
+function bgtUpdateFundraising() {
+  var goal   = parseFloat((document.getElementById("fGoalInp")||{value:25000}).value)||0;
+  var raised = parseFloat((document.getElementById("fRaisedInp")||{value:0}).value)||0;
+  var pct  = goal>0 ? Math.min(100,Math.round((raised/goal)*100)) : 0;
+  var lpct = Math.min(100,Math.round((raised/5000)*100));
+  function setEl(id,v) { var el=document.getElementById(id); if(el) el.textContent=v; }
+  function setW(id,v) { var el=document.getElementById(id); if(el) el.style.width=v+"%"; }
+  setEl("fPct", pct+"%"); setW("fBar", pct);
+  setEl("fLPct", lpct+"%"); setW("fLBar", lpct);
+  bgtUpdateTotals();
+}
+function bgtUpdateCT() {
+  var goal = parseFloat((document.getElementById("ctGoal")||{value:10}).value)||10;
+  var done = parseFloat((document.getElementById("ctDone")||{value:0}).value)||0;
+  var pct  = Math.min(100, Math.round((done/goal)*100));
+  var bar = document.getElementById("ctBar"); if(bar) bar.style.width=pct+"%";
+  var lbl = document.getElementById("ctPct"); if(lbl) lbl.textContent=done+" of "+goal+" hours";
+}
+function bgtTab(el, name) {
+  var tabs = document.querySelectorAll(".bgt-tab-el");
+  for (var i=0; i<tabs.length; i++) tabs[i].classList.remove("act");
+  el.classList.add("act");
+  var panes = ["tiers","fundraising","calltime"];
+  for (var i=0; i<panes.length; i++) {
+    var p = document.getElementById("bgt-"+panes[i]);
+    if (p) p.style.display = panes[i]===name ? "block" : "none";
+  }
+}
+
+// ── COMMS TABS ────────────────────────────────────────────────────────────────
+function commsTab(el, name) {
+  var tabs = document.querySelectorAll(".ctab");
+  for (var i=0; i<tabs.length; i++) {
+    tabs[i].style.color="var(--mgray)";
+    tabs[i].style.borderBottomColor="transparent";
+    tabs[i].style.fontWeight="400";
+  }
+  el.style.color="var(--navy)"; el.style.borderBottomColor="var(--navy)"; el.style.fontWeight="500";
+  var panes = ["presence","day","calendar"];
+  for (var i=0; i<panes.length; i++) {
+    var p = document.getElementById("comms-"+panes[i]);
+    if (p) p.style.display = panes[i]===name ? "block" : "none";
+  }
+}
+
+// Hook into enterDashboard
+var _origEnterDash = enterDashboard;
+enterDashboard = function() {
+  _origEnterDash();
+  setTimeout(populateAllWidgets, 80);
+};
+
+
+// ═══════════════════════════════════════════
+// PASSWORD + AUTH
+// ═══════════════════════════════════════════
+const ACCESS_CODE = 'password2026';
+let isAuthenticated = false;
+let userName = '';
+let userRace = '';
+
+function showPwGate() {
+  document.getElementById('pwGate').classList.add('visible');
+  setTimeout(() => document.getElementById('pwInput').focus(), 100);
+}
+function hidePwGate() {
+  document.getElementById('pwGate').classList.remove('visible');
+  document.getElementById('pwInput').value = '';
+  document.getElementById('pwInput').classList.remove('error');
+  document.getElementById('pwError').style.display = 'none';
+}
+function checkPw() {
+  const val = document.getElementById('pwInput').value.trim();
+  if (val === ACCESS_CODE) {
+    isAuthenticated = true;
+    hidePwGate();
+    enterDashboard();
+  } else {
+    document.getElementById('pwInput').classList.add('error');
+    document.getElementById('pwError').style.display = 'block';
+    setTimeout(() => document.getElementById('pwInput').classList.remove('error'), 400);
+  }
+}
+
+function goHome() {
+  doLogout();
+}
+function loadDemo() {
+  // Pre-fill all Jane Mitchell's answers
+  const fills = {
+    'candidateName': 'Jane Mitchell',
+    'a1': "I'm running because Riverside Falls families deserve a City Council member who actually lives the consequences of its decisions — and right now, nobody in that room does.",
+    'a2': "School overcrowding. Riverside Falls Elementary is at 134% capacity and the Council keeps approving commercial developments with no infrastructure investment. That stops.",
+    'a3': "Rick said: 'You've been saying this for two years. It's time.' That was enough.",
+    'a5': "General election against an incumbent. Councilmember Hess has held the seat since 2016. I need to define the contrast early and hold it.",
+    'a6': "One other name is circulating — a developer-connected local businessman. I offer an educator's perspective and twelve years living in the district's consequences.",
+    'a7': "The overcrowding issue hit a breaking point this fall. Parents are angry and organized. The window is open.",
+    'a8': "15-20 hours while school is in session. More during summer. Rick will cover mornings on weekends.",
+    'a9': "100-150 people who'd pick up. Maybe 30-40 who'd donate if I asked directly. I haven't asked yet — that's my next step.",
+    'a10': "Yes. Rick is in. The boys are young enough not to feel it yet. We talked about the privacy piece — we're both ready for that."
+  };
+  Object.entries(fills).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) { el.value = val; el.classList.add('answered'); }
+  });
+  // Set map selection
+  document.getElementById('a4').value = 'Texas — City Council — Austin';
+  document.getElementById('mapConfirmedValue').textContent = 'Texas — City Council — Austin';
+  document.getElementById('mapConfirmed').classList.add('visible');
+  // Show paywall immediately
+  document.getElementById('progressWrap').classList.add('visible');
+  // Build pillar results
+  showPaywall();
+  // Show pw gate after brief delay
+  setTimeout(showPwGate, 600);
+}
+
+function doLogout() {
+  isAuthenticated = false;
+  showScreen('landingScreen');
+}
+
+// ═══════════════════════════════════════════
+// SCREEN ROUTING
+// ═══════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function enterDashboard() {
+  // ── Pull all assessment answers ──────────────────────────────
+  const nameEl   = document.getElementById('candidateName');
+  const raceEl   = document.getElementById('mapConfirmedValue');
+  const whyEl    = document.getElementById('a1');
+  const problemEl= document.getElementById('a2');
+  const networkEl= document.getElementById('a9');
+  const timeEl   = document.getElementById('a8');
+
+  userName = nameEl && nameEl.value.trim() ? nameEl.value.trim() : 'Candidate';
+  userRace = raceEl && raceEl.textContent.trim() ? raceEl.textContent.trim() : '';
+
+  const firstName = userName.split(' ')[0];
+  const why = whyEl && whyEl.value.trim() ? whyEl.value.trim() : '';
+  const race = userRace || 'your race';
+
+  // ── Nav ──────────────────────────────────────────────────────
+  document.getElementById('navName').textContent = userName;
+  document.getElementById('navRace').textContent = userRace || 'Complete your assessment';
+
+  // ── Welcome banner ───────────────────────────────────────────
+  document.getElementById('welcomeTitle').textContent =
+    "Welcome" + (firstName !== 'Candidate' ? ", " + firstName : "") + " — let’s build your campaign.";
+
+  // Sub: pull their why if they answered it
+  const wbSub = document.getElementById('wbSub');
+  if (wbSub) {
+    if (why.length > 10) {
+      const preview = why.length > 100 ? why.substring(0, 100) + '...' : why;
+      wbSub.textContent = "“" + preview + "”";
+      wbSub.style.fontStyle = 'italic';
+    } else {
+      wbSub.textContent = "You’re in Formation. Your legal and financial infrastructure should be your focus right now.";
+    }
+  }
+
+  // ── Stat cards ───────────────────────────────────────────────
+  // Race stat
+  const statRace = document.getElementById('statRace');
+  const statRaceSub = document.getElementById('statRaceSub');
+  if (statRace && userRace) {
+    const parts = userRace.split(' — ');
+    statRace.textContent = parts.length > 1 ? parts[1] : userRace;
+    if (statRaceSub && parts.length > 0) statRaceSub.textContent = parts[0];
+  }
+
+  // Assessment sub
+  const asmSub = document.getElementById('statAssessmentSub');
+  if (asmSub) asmSub.textContent = firstName !== 'Candidate'
+    ? firstName + "’s 3 pillars" : 'All 3 pillars complete';
+
+  // ── Component descriptions personalized ──────────────────────
+  // Filing requirements — add state name
+  const filingBanner = document.querySelector('#view-filing .cb-eyebrow');
+  if (filingBanner && userRace) {
+    filingBanner.textContent = 'Component 03 — ' + userRace;
+  }
+
+  // Press release — mention their name
+  const prBanner = document.querySelector('#view-pressrelease .cb-sub');
+  if (prBanner && firstName !== 'Candidate') {
+    prBanner.textContent = firstName + "’s release is already ∸70% complete from the assessment. Click any section to edit, then export.";
+  }
+
+  // Welcome views
+  showScreen('dashboardScreen');
+  showView('dashboard');
+}
+
+// ═══════════════════════════════════════════
+// DASHBOARD VIEW ROUTING
+// ═══════════════════════════════════════════
+const VIEWS = ['dashboard','pillars','timeline','filing','budget','glossary','pressrelease','comms'];
+
+function showView(name) {
+  VIEWS.forEach(v => {
+    const el = document.getElementById('view-' + v);
+    if (el) el.style.display = v === name ? 'block' : 'none';
+    const nav = document.getElementById('nav-' + v);
+    if (nav) nav.classList.toggle('active', v === name);
+  });
+  document.getElementById('dashMainArea').scrollTop = 0;
+}
+
+// ═══════════════════════════════════════════
+// ASSESSMENT FLOW
+// ═══════════════════════════════════════════
+const STEPS = [
+  {show:['header-p1','callout-kennedy','q-name'], questions:['candidateName']},
+  {show:['q1'], questions:['a1']},
+  {show:['q2'], questions:['a2']},
+  {show:['q3'], questions:['a3']},
+  {show:['header-p2','q4'], questions:['a4']},
+  {show:['q5'], questions:['a5']},
+  {show:['q6'], questions:['a6']},
+  {show:['q7'], questions:['a7']},
+  {show:['header-p3','q8'], questions:['a8']},
+  {show:['q9'], questions:['a9']},
+  {show:['q10'], questions:['a10']},
+];
+const PILLARS = [
+  {name:'Purpose — Your Why', icon:'P', questions:['a1','a2','a3']},
+  {name:'Opening — Your Opportunity', icon:'O', questions:['a4','a5','a6','a7']},
+  {name:'Resources — Your Means', icon:'R', questions:['a8','a9','a10']},
+];
+const PLABELS = [
+  'Getting started',
+  'Pillar 1 — Purpose','Pillar 1 — Purpose','Pillar 1 — Purpose',
+  'Pillar 2 — Opening','Pillar 2 — Opening','Pillar 2 — Opening','Pillar 2 — Opening',
+  'Pillar 3 — Resources','Pillar 3 — Resources','Pillar 3 — Resources',
+];
+let currentStep = -1;
+
+function startAssessment() {
+  document.getElementById('progressWrap').classList.add('visible');
+  document.getElementById('navRow').classList.add('visible');
+  goToStep(0);
+  setTimeout(() => document.getElementById('header-p1').scrollIntoView({behavior:'smooth',block:'start'}), 100);
+}
+function goToStep(step) {
+  if (step >= STEPS.length) { showPaywall(); return; }
+  currentStep = step;
+  STEPS.forEach((s,i) => s.show.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('visible', i <= step);
+  }));
+  updateProgress(); updateNav();
+  const el = document.getElementById(STEPS[step].show[0]);
+  if (el) setTimeout(() => el.scrollIntoView({behavior:'smooth',block:'start'}), 80);
+}
+function goNext() { if (canProceed()) goToStep(currentStep + 1); }
+function goBack() { if (currentStep > 0) goToStep(currentStep - 1); }
+function canProceed() {
+  return STEPS[currentStep].questions.every(id => {
+    const el = document.getElementById(id);
+    return el && el.value.trim().length > 2;
+  });
+}
+function onNameInput() {
+    updateNav();
+  }
+  function onAnswer(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('answered', el.value.trim().length > 2);
+  updateNav();
+}
+function updateNav() {
+  const next = document.getElementById('btnNext');
+  const back = document.getElementById('btnBack');
+  const hint = document.getElementById('navHint');
+  const ok = canProceed();
+  next.disabled = !ok;
+  next.textContent = currentStep === STEPS.length - 1 ? 'See My Results' : currentStep === 0 ? 'Get started →' : 'Continue';
+  back.style.display = currentStep === 0 ? 'none' : '';
+  hint.textContent = ok ? '' : 'Answer to continue';
+}
+function updateProgress() {
+  const pct = Math.round((currentStep / STEPS.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressLabel').textContent = PLABELS[currentStep] || '';
+}
+function showPaywall() {
+  document.getElementById('navRow').classList.remove('visible');
+  document.getElementById('paywall').classList.add('visible');
+  const container = document.getElementById('pillarResults');
+  container.innerHTML = '';
+  PILLARS.forEach(pillar => {
+    const snippets = pillar.questions.map(id => {
+      const el = document.getElementById(id); return el ? el.value.trim() : '';
+    }).filter(v => v.length > 0);
+    const preview = snippets[0] ? snippets[0].substring(0, 130) + (snippets[0].length > 130 ? '...' : '') : 'No answer recorded.';
+    const row = document.createElement('div');
+    row.className = 'pillar-row';
+    row.innerHTML = '<div class="pillar-icon">' + pillar.icon + '</div><div style="flex:1"><div class="pillar-name">' + pillar.name + '</div><div class="pillar-snippet">' + preview.replace(/</g,'&lt;') + '</div></div>';
+    container.appendChild(row);
+  });
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressPct').textContent = '100%';
+  document.getElementById('progressLabel').textContent = 'Assessment Complete';
+  setTimeout(() => document.getElementById('paywall').scrollIntoView({behavior:'smooth',block:'start'}), 100);
+}
+
+// ═══════════════════════════════════════════
+// MAP (Q4)
+// ═══════════════════════════════════════════
+let mapState = '', mapRace = '', mapCounty = '';
+const MAP_DEFAULT = '#D0D7E3', MAP_HOVER = '#8892A0', MAP_SEL = '#1B2A4A', MAP_GOLD = '#C9A84C';
+const RACE_LOCAL = ['City Council','Mayor','School Board','Other Local'];
+const RACE_DISTRICT = ['State Legislature','County Commission','District Attorney','Judicial'];
+
+function initMap() {
+  if (!window.d3 || !window.topojson) { setTimeout(initMap, 100); return; }
+  const svg = d3.select('#usmap');
+  const tooltip = document.getElementById('map-tooltip');
+  const wrap = document.getElementById('map-wrap');
+  const proj = d3.geoAlbersUsa().scale(1200).translate([480,300]);
+  const path = d3.geoPath(proj);
+  d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json').then(us => {
+    svg.selectAll('path').data(topojson.feature(us, us.objects.states).features).join('path')
+      .attr('class','map-state-path').attr('d',path)
+      .attr('fill',MAP_DEFAULT).attr('stroke','#fff').attr('stroke-width','0.6')
+      .on('mousemove', function(event,d) {
+        if (d.properties.name !== mapState) d3.select(this).attr('fill',MAP_HOVER);
+        const [mx,my] = d3.pointer(event, wrap);
+        tooltip.style.display='block'; tooltip.style.left=(mx+12)+'px'; tooltip.style.top=(my-30)+'px';
+        tooltip.textContent = d.properties.name;
+      })
+      .on('mouseleave', function(event,d) {
+        if (d.properties.name !== mapState) d3.select(this).attr('fill',MAP_DEFAULT);
+        tooltip.style.display='none';
+      })
+      .on('click', function(event,d) {
+        svg.selectAll('.map-state-path').attr('fill',MAP_DEFAULT).attr('stroke','#fff').attr('stroke-width','0.6');
+        d3.select(this).attr('fill',MAP_SEL).attr('stroke',MAP_GOLD).attr('stroke-width','2');
+        tooltip.style.display='none';
+        onStateClick(d.properties.name);
+      });
+  });
+}
+function onStateClick(name) {
+  mapState=name; mapRace=''; mapCounty='';
+  document.getElementById('stateName').textContent = name;
+  document.getElementById('statePanel').classList.add('visible');
+  document.getElementById('countyWrap').classList.remove('visible');
+  document.getElementById('mapConfirmBtn').classList.remove('visible');
+  document.getElementById('mapConfirmed').classList.remove('visible');
+  document.querySelectorAll('.race-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('countyInput').value = '';
+  document.getElementById('a4').value = '';
+  updateNav();
+  document.getElementById('statePanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function selectRace(btn) {
+  document.querySelectorAll('.race-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected'); mapRace = btn.dataset.race; mapCounty = '';
+  document.getElementById('countyInput').value = '';
+  document.getElementById('a4').value = '';
+  updateNav();
+  const cw = document.getElementById('countyWrap');
+  const cl = document.getElementById('countyLabel');
+  const cb = document.getElementById('mapConfirmBtn');
+  if (RACE_LOCAL.includes(mapRace)) { cl.textContent='Which city or municipality?'; cw.classList.add('visible'); cb.classList.remove('visible'); }
+  else if (RACE_DISTRICT.includes(mapRace)) { cl.textContent = mapRace==='State Legislature'?'Which district number?':'Which county?'; cw.classList.add('visible'); cb.classList.remove('visible'); }
+  else { cw.classList.remove('visible'); cb.classList.add('visible'); }
+}
+function onCountyInput() {
+  mapCounty = document.getElementById('countyInput').value.trim();
+  document.getElementById('mapConfirmBtn').classList.toggle('visible', mapCounty.length > 1);
+}
+function confirmRace() {
+  const parts = [mapState, mapRace];
+  if (mapCounty) parts.push(mapCounty);
+  const summary = parts.join(' — ');
+  document.getElementById('a4').value = summary;
+  document.getElementById('mapConfirmedValue').textContent = summary;
+  document.getElementById('mapConfirmed').classList.add('visible');
+  document.getElementById('statePanel').classList.remove('visible');
+  updateNav();
+  document.getElementById('mapConfirmed').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function resetMap() {
+  mapState=''; mapRace=''; mapCounty='';
+  document.getElementById('a4').value = '';
+  document.getElementById('statePanel').classList.remove('visible');
+  document.getElementById('mapConfirmed').classList.remove('visible');
+  document.getElementById('countyWrap').classList.remove('visible');
+  document.getElementById('mapConfirmBtn').classList.remove('visible');
+  document.querySelectorAll('.race-btn').forEach(b => b.classList.remove('selected'));
+  if (window.d3) d3.select('#usmap').selectAll('.map-state-path').attr('fill',MAP_DEFAULT).attr('stroke','#fff').attr('stroke-width','0.6');
+  updateNav();
+}
+
+// Init
+initMap();
+
+// ═══════════════════════════════════════════
+// POPULATE DASHBOARD FROM ASSESSMENT DATA
+// ═══════════════════════════════════════════
+function populateAllWidgets() {
+  const name = document.getElementById('candidateName')?.value.trim() || 'Jane Mitchell';
+  const firstName = name.split(' ')[0];
+  const race = document.getElementById('a4')?.value.trim() || 'Texas — City Council — Austin';
+  const why = document.getElementById('a1')?.value.trim() || '';
+  const problem = document.getElementById('a2')?.value.trim() || '';
+  const advisor = document.getElementById('a3')?.value.trim() || '';
+  const seat = document.getElementById('a5')?.value.trim() || '';
+  const opponent = document.getElementById('a6')?.value.trim() || '';
+  const timing = document.getElementById('a7')?.value.trim() || '';
+  const time = document.getElementById('a8')?.value.trim() || '';
+  const network = document.getElementById('a9')?.value.trim() || '';
+  const family = document.getElementById('a10')?.value.trim() || '';
+
+  populatePillars(name, firstName, race, why, problem, advisor, seat, opponent, timing, time, network, family);
+  populateTimeline();
+  populateFilingChecklist();
+  populatePressRelease(name, firstName, race, why, problem);
+  populatePresenceChecklist();
+  populateAnnouncementDay();
+  populateGlossary();
+  initBudget();
+}
+
+// ── PILLARS ──────────────────────────────────────────────────────────────────
+function populatePillars(name, firstName, race, why, problem, advisor, seat, opponent, timing, time, network, family) {
+  const wrap = document.getElementById('pillarAnswersWrap');
+  if (!wrap) return;
+  const pillars = [
+    { letter:'P', name:'Pillar 1', title:'Purpose — Your Why',
+      qs: [
+        { q:'In one sentence, why are you running?', a: why },
+        { q:'What problem are you at your first town hall to solve?', a: problem },
+        { q:'What did your trusted advisor say?', a: advisor },
+      ]
+    },
+    { letter:'O', name:'Pillar 2', title:'Opening — Your Opportunity',
+      qs: [
+        { q:'What seat are you targeting and why?', a: race },
+        { q:'What type of race is this?', a: seat },
+        { q:'Who else is likely to run?', a: opponent },
+        { q:'Why is now the right time?', a: timing },
+      ]
+    },
+    { letter:'R', name:'Pillar 3', title:'Resources — Your Means',
+      qs: [
+        { q:'How many hours per week can you commit?', a: time },
+        { q:'How many people would take your call? How many would donate?', a: network },
+        { q:'Have you had the honest family conversation?', a: family },
+      ]
+    },
+  ];
+  wrap.innerHTML = pillars.map(p => `
+    <div class="pil-card">
+      <div class="pil-hdr">
+        <div class="pil-num">${p.letter}</div>
+        <div class="pil-hdr-txt">
+          <div class="pil-name">${p.name}</div>
+          <div class="pil-title">${p.title}</div>
+        </div>
+      </div>
+      <div class="pil-body">
+        ${p.qs.map(q => `
+          <div class="pil-q">
+            <div class="pil-q-txt">${q.q}</div>
+            <div class="pil-a">${q.a || '<span style="color:var(--mgray);font-style:normal;">Not answered</span>'}</div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+
+  const banner = document.getElementById('pillarsBannerTitle');
+  if (banner) banner.textContent = firstName !== 'Candidate' ? firstName + "'s assessment results." : 'Your assessment results.';
+}
+
+// ── TIMELINE ─────────────────────────────────────────────────────────────────
+// ── KITCHEN CABINET ───────────────────────────────────────────────────────────
+var cabinetData = [{name:"",role:""},{name:"",role:""},{name:"",role:""},{name:"",role:""},{name:"",role:""}];
+
+function renderCabinet() {
+  var grid = document.getElementById("cabinetGrid");
+  if (!grid) return;
+  var html = "";
+  for (var i = 0; i < cabinetData.length; i++) {
+    var slot = cabinetData[i];
+    if (slot.name) {
+      var initials = slot.name.split(" ").map(function(w){return w[0];}).join("").substring(0,2).toUpperCase();
+      html += "<div style='background:#fff;border:1px solid var(--border);border-top:2px solid var(--gold);padding:16px;text-align:center;'>" +
+        "<div style='width:36px;height:36px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:12px;font-weight:500;color:var(--gold);'>" + initials + "</div>" +
+        "<div style='font-size:12px;font-weight:500;color:var(--navy);margin-bottom:2px;'>" + slot.name + "</div>" +
+        "<div style='font-size:11px;color:var(--mgray);'>" + slot.role + "</div>" +
+        "<button onclick='clearCabinet(" + i + ")' style='margin-top:8px;font-size:10px;color:var(--mgray);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;'>Remove</button>" +
+      "</div>";
+    } else {
+      html += "<div style='background:var(--off);border:1px dashed var(--border);padding:16px;text-align:center;cursor:pointer;' onclick='addCabinetSlot(" + i + ")'>" +
+        "<div style='font-size:20px;color:var(--border);margin-bottom:6px;'>+</div>" +
+        "<div style='font-size:12px;color:var(--mgray);'>Add advisor</div>" +
+      "</div>";
+    }
+  }
+  grid.innerHTML = html;
+}
+
+function addCabinetSlot(i) {
+  var name = prompt("Advisor name:");
+  if (!name || !name.trim()) return;
+  var role = prompt("Their role (e.g. Spouse, Mentor, Community Leader):");
+  cabinetData[i] = {name:name.trim(), role:(role||"").trim()};
+  renderCabinet();
+}
+
+function clearCabinet(i) {
+  cabinetData[i] = {name:"",role:""};
+  renderCabinet();
+}
+
+function pillarTab(el, name) {
+  var tabs = document.querySelectorAll(".pil-tab");
+  for (var i = 0; i < tabs.length; i++) {
+    tabs[i].style.color = "var(--mgray)";
+    tabs[i].style.borderBottomColor = "transparent";
+    tabs[i].style.fontWeight = "400";
+  }
+  el.style.color = "var(--navy)";
+  el.style.borderBottomColor = "var(--navy)";
+  el.style.fontWeight = "500";
+  var panes = ["answers","cabinet","nextsteps"];
+  for (var i = 0; i < panes.length; i++) {
+    var p = document.getElementById("pil-" + panes[i]);
+    if (p) p.style.display = panes[i] === name ? "block" : "none";
+  }
+  if (name === "cabinet") renderCabinet();
+}
+
+function renderPillarNextSteps(firstName, s1, s2, s3) {
+  var wrap = document.getElementById("pillarNextSteps");
+  if (!wrap) return;
+  var steps = [
+    {icon:"02", title:"Start your Campaign Timeline", sub:"You are in Formation. Map your milestones before you go public.", action:"Open Timeline", view:"timeline"},
+    {icon:"03", title:"Research your filing deadline", sub:"This is your most important early date. Put it everywhere before you do anything else.", action:"Filing Requirements", view:"filing"},
+  ];
+  if (s3 < 80) steps.push({icon:"R", title:"Strengthen your Resources pillar", sub:"Your Resources score suggests your network or time commitment needs more clarity. Work those numbers up before filing.", action:"Edit answers", view:"", warn:true});
+  if (s1 < 80) steps.push({icon:"P", title:"Sharpen your Purpose statement", sub:"Your one-sentence why is the most important thing you will write for this campaign. Keep working until it is visceral and clear.", action:"Edit answers", view:"", warn:true});
+  if (s2 < 80) steps.push({icon:"O", title:"Deepen your Opening analysis", sub:"A clear-eyed read of the electoral landscape is what separates candidates who win from those who had good intentions.", action:"Edit answers", view:"", warn:true});
+  steps.push({icon:"lock", title:"Donor Call Scripts — Full Playbook", sub:"Turn your network estimate into your first fundraising list with proven call scripts.", action:"Upgrade", view:"", pro:true});
+
+  var html = "";
+  for (var i = 0; i < steps.length; i++) {
+    var s = steps[i];
+    var iconBg  = s.pro ? "var(--gold)" : s.warn ? "#FFEBEE" : "var(--navy)";
+    var iconClr = s.pro ? "var(--navy)" : s.warn ? "#C62828" : "var(--gold)";
+    var iconHtml = s.icon === "lock"
+      ? "<svg width='13' height='13' viewBox='0 0 16 16' fill='" + iconClr + "'><path d='M11 7V5a3 3 0 00-6 0v2H4v7h8V7h-1zM7 5a1 1 0 012 0v2H7V5z'/></svg>"
+      : "<span style='font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:" + iconClr + ";'>" + s.icon + "</span>";
+    var btnBg = s.pro ? "var(--gold)" : "var(--navy)";
+    var btnClr = s.pro ? "var(--navy)" : "#fff";
+    var viewAttr = s.view ? ("data-view='" + s.view + "'") : "";
+    html += "<div style='display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start;'>" +
+      "<div style='width:32px;height:32px;background:" + iconBg + ";display:flex;align-items:center;justify-content:center;flex-shrink:0;'>" + iconHtml + "</div>" +
+      "<div style='flex:1;'>" +
+        "<div style='font-size:13px;font-weight:500;color:" + (s.pro ? "var(--mgray)" : "var(--navy)") + ";margin-bottom:2px;'>" + s.title + "</div>" +
+        "<div style='font-size:12px;color:var(--mgray);line-height:1.5;'>" + s.sub + "</div>" +
+      "</div>" +
+      "<button style='padding:7px 16px;background:" + btnBg + ";color:" + btnClr + ";font-size:11px;font-weight:500;border:none;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;align-self:center;' " + viewAttr + ">" + s.action + " →</button>" +
+    "</div>";
+  }
+  wrap.innerHTML = html;
+}
+
+// Event delegation for data-view buttons
+document.addEventListener("click", function(e) {
+  var btn = e.target.closest("button[data-view]");
+  if (btn) {
+    var view = btn.getAttribute("data-view");
+    if (view) showView(view);
+  }
+});
+</script>
+</body>
+</html>
